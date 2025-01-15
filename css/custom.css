@@ -239,3 +239,7 @@
     position: relative;
     top: -200px;
 }
+
+.recent-post-items img {
+    border-radius: 8px;
+}
