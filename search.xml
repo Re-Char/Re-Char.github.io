@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>DELL Latitude 5290 2in1扩展硬盘避坑</title>
+    <url>/post/4a17b156.html</url>
+    <content><![CDATA[<p>PS：写这篇文章的原因是我在扩展这个平板的硬盘时就踩过坑，而且关于这台平板的文章在网上非常少且有些错误的地方。</p>
+<p>自从需要带着电脑出去干活的频率升高后就一直想搞个win平板玩玩，主要是方便带着出门加轻度办公<del>（其实主要原因是方便玩旮旯给木）</del>。为什么要选择傻多戴呢，无他，就是因为可以扩展硬盘而且二手也不贵（某鱼上1000多一点带键盘拿下，基本上是全新）。</p>
+<h2 id="关于硬盘位"><a href="#关于硬盘位" class="headerlink" title="关于硬盘位"></a>关于硬盘位</h2><p>关于大家最关心的扩展位硬盘的问题，这个硬盘位是wwan口，<strong>不支持sata协议，只支持nvme协议 pcie3.0，并且需要双缺口（B&amp;M key）的硬盘才能插得进去</strong>。规格我选择的是2242的（是短硬盘，平时大家看得多的长硬盘是2280规格的），2230的没试过，貌似也是可以的（别人有成功过）。根据硬盘的螺丝定位口来看，2242是刚刚好的。<br><img src="/image/post1/ae270d110612862760e6b359d714f10a429931853.jpg" alt="硬盘展示"></p>
+<h2 id="速度"><a href="#速度" class="headerlink" title="速度"></a>速度</h2><p>测速大家自己看吧<del>（主硬盘位商家给了一根sata协议的好黑心）</del><br><img src="/image/post1/e29d3ea9d3e14ea0f3912cba53f352ac429931853.png" alt="测速展示"></p>
+<p>在这里纠正一点，在别的文章有看到过把ngff和nvme放在一起说的，而实际上ngff和nvme不是并列关系，ngff（Next Generation Form Factor）就是m.2的前称，而nvme是一种传输协议。</p>
+]]></content>
+      <tags>
+        <tag>DELL</tag>
+        <tag>搞机</tag>
+        <tag>win平板</tag>
+        <tag>避坑</tag>
+      </tags>
+  </entry>
+</search>

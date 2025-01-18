@@ -232,17 +232,17 @@
 
 #rightside-config-show button {
     position: relative;
-    top: -200px; 
+    top: -100px; 
 }
 
 #rightside-config-show a {
     position: relative;
-    top: -200px;
+    top: -100px;
 }
 
 #rightside-config-hide button {
     position: relative;
-    top: -200px;
+    top: -100px;
 }
 
 .recent-post-items img {
