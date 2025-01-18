@@ -235,6 +235,11 @@
     top: -200px; 
 }
 
+#rightside-config-show a {
+    position: relative;
+    top: -200px;
+}
+
 #rightside-config-hide button {
     position: relative;
     top: -200px;
