@@ -209,7 +209,6 @@ template {
 }
 .fontawesomeIcon,
 .custom-hr:before,
-#post .post-copyright:before,
 #post #post-outdate-notice:before,
 .note:not(.no-icon)::before,
 .search-dialog hr:before {
@@ -2363,6 +2362,9 @@ figure.highlight pre .javascript .function {
 #recent-posts .recent-post-item >.recent-post-info > .article-meta-wrap .article-meta-link {
   margin: 0 4px;
 }
+#recent-posts .recent-post-item >.recent-post-info > .article-meta-wrap time {
+  display: none;
+}
 #recent-posts .recent-post-item >.recent-post-info > .article-meta-wrap a {
   color: var(--card-meta);
 }
@@ -3329,7 +3331,7 @@ figure.highlight pre .javascript .function {
   content: '';
 }
 #page-header.full_page {
-  height: 600px;
+  height: 534px;
   background-attachment: fixed;
 }
 #page-header.full_page #site-info {
@@ -3615,6 +3617,9 @@ figure.highlight pre .javascript .function {
 #post-info #post-meta a:hover {
   color: #49b1f5;
   text-decoration: underline;
+}
+#post-info #post-meta time {
+  display: none;
 }
 #nav {
   position: absolute;
@@ -4429,15 +4434,20 @@ figure.highlight pre .javascript .function {
   -o-transition: box-shadow 0.3s ease-in-out;
   -ms-transition: box-shadow 0.3s ease-in-out;
   transition: box-shadow 0.3s ease-in-out;
-  border-radius: 6px;
+  overflow: hidden;
+  border-radius: 12px !important;
+  background-color: #eff1f3;
 }
 #post .post-copyright:before {
   position: absolute;
-  top: 2px;
-  right: 12px;
-  color: #49b1f5;
-  content: '\f1f9';
-  font-size: 1.3em;
+  right: -26px;
+  top: -120px;
+  content: '\f25e';
+  font-size: 200px;
+  font-family: 'Font Awesome 5 Brands';
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
 }
 #post .post-copyright:hover {
   -webkit-box-shadow: 0 0 8px 0 rgba(232,237,250,0.6), 0 2px 4px 0 rgba(232,237,250,0.5);
@@ -4454,11 +4464,14 @@ figure.highlight pre .javascript .function {
   padding-left: 6px;
 }
 #post .post-copyright .post-copyright-info a {
-  text-decoration: underline;
+  text-decoration: none;
   word-break: break-word;
 }
 #post .post-copyright .post-copyright-info a:hover {
   text-decoration: none;
+}
+#post .post-copyright-cc-info {
+  color: #49b1f5;
 }
 #post #post-outdate-notice {
   position: relative;

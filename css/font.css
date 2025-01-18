@@ -29,3 +29,31 @@
 .icon-bilibili-fill:before {
     content: "\e66b";
 }
+
+@font-face {
+    font-family: 'FiraCodeNerdFontMono-Medium';
+    font-display: swap;
+    src: url('/fonts/FiraCodeNerdFontMono-Medium.ttf') format("truetype");
+}
+
+@font-face {
+    font-family: 'NotoSansSC-Medium';
+    font-display: swap;
+    src: url('/fonts/NotoSansSC-Medium.ttf') format("truetype");
+}
+
+code, pre {
+    font-family: 'FiraCodeNerdFontMono-Medium', monospace;
+    font-size: 14px;
+    /* 设置代码字体大小 */
+}
+
+#post {
+    font-family: 'NotoSansSC-Medium', sans-serif;
+    font-size: 16px;
+    /* 设置全局字体大小 */
+}
+
+#aside-content, #recent-posts, #post-info {
+    font-family: 'NotoSansSC-Medium', sans-serif;
+}
