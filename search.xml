@@ -16,4 +16,64 @@
         <tag>避坑</tag>
       </tags>
   </entry>
+  <entry>
+    <title>WSL2的安装和简单配置</title>
+    <url>/post/87099e43.html</url>
+    <content><![CDATA[<p>写在前面：本教程使用的是Windows11的系统，不保证Windows10也适用。</p>
+<h2 id="一、为Windows启用Hyper-v虚拟化"><a href="#一、为Windows启用Hyper-v虚拟化" class="headerlink" title="一、为Windows启用Hyper-v虚拟化"></a>一、为Windows启用Hyper-v虚拟化</h2><ul>
+<li><p>按下win键，打开开始菜单，在搜索框中搜索<code>powershell</code>并按下右键选择以管理员身份运行。<br><img src="/image/post2/0865930a85e7def3f66138ae61450941.png" alt="展示"></p>
+</li>
+<li><p>输入命令来执行虚拟化操作：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Enable-WindowsOptionalFeature -Online -FeatureName $(<span class="string">&quot;Microsoft-Windows-Subsystem-Linux&quot;</span>,<span class="string">&quot;VirtualMachinePlatform&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>  此操作需要重启，若询问是否立即重启执行操作，输入Y并按下回车键即可。</p>
+</li>
+</ul>
+<h2 id="二、设置WSL2默认版本为version2"><a href="#二、设置WSL2默认版本为version2" class="headerlink" title="二、设置WSL2默认版本为version2"></a>二、设置WSL2默认版本为version2</h2><p>在之前的管理员powershell界面输入<code>wsl --set-default-version 2</code>即可，之后可以输入<code>wsl -v</code>来确定版本。<br><img src="/image/post2/168383ad282389c72db900a0869ef219.png" alt="wsl版本"><br>现在win11默认的wsl版本就是2，此操作也可以不做。</p>
+<h2 id="三、下载Linux发行版"><a href="#三、下载Linux发行版" class="headerlink" title="三、下载Linux发行版"></a>三、下载Linux发行版</h2><h3 id="方案一：通过Microsoft-Store来进行下载"><a href="#方案一：通过Microsoft-Store来进行下载" class="headerlink" title="方案一：通过Microsoft Store来进行下载"></a>方案一：通过Microsoft Store来进行下载</h3><p>通过微软商店来下载非常简单，只需要在微软商店搜索对应的Linux发行版的名字即可进行下载。比如这里以下载ubuntu为例：<br><img src="/image/post2/d573d3eb16225db1e4a8dcf3c017d7b4.png" alt="Ubuntu"></p>
+<h3 id="方案二：通过命令行来进行安装-推荐"><a href="#方案二：通过命令行来进行安装-推荐" class="headerlink" title="方案二：通过命令行来进行安装(推荐)"></a>方案二：通过命令行来进行安装(推荐)</h3><ul>
+<li>使用<code>wsl -l -o</code>命令来查看当前可用的发行版。<br><img src="/image/post2/6b3a505f144d94c59fe6fb4d9589e697.png" alt="可用列表"></li>
+<li>使用<code>wsl --install -d &lt;distribution name&gt;</code>命令来下载指定的Linux发行版，这里的distribution name就是指上面那个操作中的第一列列出来的名称。</li>
+</ul>
+<p>等待耐心下载完并弹出相应提示之后，安装过程就完成了。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 输出类似如下信息则启动成功</span></span><br><span class="line">Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.153.1-microsoft-standard-WSL2 x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、-wslconfig文件设置"><a href="#四、-wslconfig文件设置" class="headerlink" title="四、.wslconfig文件设置"></a>四、.wslconfig文件设置</h2><ul>
+<li><p>进入<code>C:/Users/Username/</code>目录，如果当前目录不存在名为<code>.wslconfig</code>的文件，则手动创建一个。</p>
+</li>
+<li><p>用记事本打开<code>.wslconfig</code>文件并输入以下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[experimental]</span><br><span class="line">autoMemoryReclaim=gradual  </span><br><span class="line">networkingMode=mirrored</span><br><span class="line">dnsTunneling=<span class="literal">true</span></span><br><span class="line">firewall=<span class="literal">true</span></span><br><span class="line">autoProxy=<span class="literal">true</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>这个操作之后可以使用<code>ip addr</code>命令查看ip地址并和在<code>powershell</code>中输入<code>ipconfig</code>后的地址进行对比，如若一样则网络模式修改成功。此外，上面的功能是Windows内部版本19041及更高版本中作为wsl2运行的发行版特有的，可以自行去看官网以了解更多功能<a href="https://learn.microsoft.com/en-us/windows/wsl/wsl-config#configuration-options">WSL配置</a>。</p>
+<h3 id="clash接管wsl2网络"><a href="#clash接管wsl2网络" class="headerlink" title="clash接管wsl2网络"></a>clash接管wsl2网络</h3><p>让clash接管wsl的网络，需要先在clash中打开<code>Allow LAN</code>功能。<br><img src="/image/post2/clash1.png" alt="clash"></p>
+<h4 id="方案一-你能使用wsl2的实验性功能"><a href="#方案一-你能使用wsl2的实验性功能" class="headerlink" title="方案一(你能使用wsl2的实验性功能)"></a>方案一(你能使用wsl2的实验性功能)</h4><p>确保上述的操作无误，输入<code>wget www.google.com</code>来确认clash确实已经接管了wsl的网络(此操作需要在Linux的不需要root写权限的目录下进行)。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; wget www.google.com</span><br><span class="line"></span><br><span class="line">--2025-01-21 22:18:49--  http://www.google.com/</span><br><span class="line">Connecting to 127.0.0.1:7890... connected.</span><br><span class="line">Proxy request sent, awaiting response... 200 OK</span><br><span class="line">Length: unspecified [text/html]</span><br><span class="line">Saving to: ‘index.html’</span><br><span class="line"></span><br><span class="line">index.html                        [ &lt;=&gt;                                              ]  19.35K  --.-KB/s    <span class="keyword">in</span> 0.05s</span><br><span class="line"></span><br><span class="line">2025-01-21 22:18:49 (376 KB/s) - ‘index.html’ saved [19818]</span><br></pre></td></tr></table></figure>
+
+<h4 id="方案二-你不能使用wsl2的实验性功能"><a href="#方案二-你不能使用wsl2的实验性功能" class="headerlink" title="方案二(你不能使用wsl2的实验性功能)"></a>方案二(你不能使用wsl2的实验性功能)</h4><p>这里借鉴了某<a href="https://eastmonster.github.io/2022/10/05/clash-config-in-wsl/">大神</a>的方案，若你的wsl版本或者windows版本不能使用上面的配置，将<code>.wslconfig</code>中的内容改为</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[wsl2]</span><br><span class="line">dnsTunneling=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>之后编辑Linux根目录下的<code>.bashrc</code>文件，加入以下三行内容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">host_ip=$(<span class="built_in">cat</span> /etc/resolv.conf |grep <span class="string">&quot;nameserver&quot;</span> |<span class="built_in">cut</span> -f 2 -d <span class="string">&quot; &quot;</span>)</span><br><span class="line"><span class="built_in">export</span> http_proxy=<span class="string">&quot;http://<span class="variable">$host_ip</span>:[端口]&quot;</span></span><br><span class="line"><span class="built_in">export</span> https_proxy=<span class="string">&quot;http://<span class="variable">$host_ip</span>:[端口]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里的端口就是clash的port，如上面我的截图中clash的端口是7890(一般默认就是7890)。完成后输入<code>source ~/.bashrc</code>来让配置生效，可以输入<code>echo $http_proxy</code>来验证是否成功。</p>
+<h2 id="五、更换软件源"><a href="#五、更换软件源" class="headerlink" title="五、更换软件源"></a>五、更换软件源</h2><p>根据你使用的Linux发行版直接上网搜索相应的镜像源即可，这里给出一个汇总链接<a href="https://segmentfault.com/a/1190000000375848">镜像源</a>。复制相应的镜像源后，直接进行修改即可。这里以debian12更换清华源为例。</p>
+<ul>
+<li><p>访问<a href="https://mirrors.tuna.tsinghua.edu.cn/help/debian/">debian清华镜像源</a>(网址中的debian可换成你的Linux发行版)并复制软件源。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm main contrib non-free non-free-firmware</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm main contrib non-free non-free-firmware</span></span><br><span class="line"></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware</span></span><br><span class="line"></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-backports main contrib non-free non-free-firmware</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-backports main contrib non-free non-free-firmware</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 以下安全更新软件源包含了官方源与镜像站配置，如有需要可自行修改注释切换</span></span><br><span class="line">deb https://security.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware</span><br><span class="line"><span class="comment"># deb-src https://security.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>备份文件并修改文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 备份源文件</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">mv</span> /etc/apt/sources.list /etc/apt/sources.list.backup</span><br><span class="line"><span class="comment"># 修改文件</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">touch</span> /etc/apt/sources.list</span><br><span class="line"><span class="built_in">sudo</span> vi /etc/apt/sources.list <span class="comment"># 将复制内容粘贴进去 </span></span><br></pre></td></tr></table></figure>
+
+<p>相信vim操作就不用教了吧，这里也可以使用你更熟悉的编辑器进行修改。</p>
+</li>
+</ul>
+<p>最后输入<code>sudo apt update</code>和<code>sudo apt upgrade</code>命令即可验证软件源是否修改成功。</p>
+]]></content>
+      <tags>
+        <tag>WSL2</tag>
+        <tag>Windows11</tag>
+        <tag>Linux</tag>
+        <tag>教程</tag>
+      </tags>
+  </entry>
 </search>
