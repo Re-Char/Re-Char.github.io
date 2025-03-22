@@ -1,76 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>DELL Latitude 5290 2in1扩展硬盘避坑</title>
-    <url>/post/4a17b156.html</url>
-    <content><![CDATA[<p>PS：写这篇文章的原因是我在扩展这个平板的硬盘时就踩过坑，而且关于这台平板的文章在网上非常少且有些错误的地方。</p>
-<p>自从需要带着电脑出去干活的频率升高后就一直想搞个win平板玩玩，主要是方便带着出门加轻度办公<del>（其实主要原因是方便玩旮旯给木）</del>。为什么要选择傻多戴呢，无他，就是因为可以扩展硬盘而且二手也不贵（某鱼上1000多一点带键盘拿下，基本上是全新）。</p>
-<h2 id="关于硬盘位"><a href="#关于硬盘位" class="headerlink" title="关于硬盘位"></a>关于硬盘位</h2><p>关于大家最关心的扩展位硬盘的问题，这个硬盘位是wwan口，<strong>不支持sata协议，只支持nvme协议 pcie3.0，并且需要双缺口（B&amp;M key）的硬盘才能插得进去</strong>。规格我选择的是2242的（是短硬盘，平时大家看得多的长硬盘是2280规格的），2230的没试过，貌似也是可以的（别人有成功过）。根据硬盘的螺丝定位口来看，2242是刚刚好的。<br><img src="/image/post1/ae270d110612862760e6b359d714f10a429931853.jpg" alt="硬盘展示"></p>
-<h2 id="速度"><a href="#速度" class="headerlink" title="速度"></a>速度</h2><p>测速大家自己看吧<del>（主硬盘位商家给了一根sata协议的好黑心）</del><br><img src="/image/post1/e29d3ea9d3e14ea0f3912cba53f352ac429931853.png" alt="测速展示"></p>
-<p>在这里纠正一点，在别的文章有看到过把ngff和nvme放在一起说的，而实际上ngff和nvme不是并列关系，ngff（Next Generation Form Factor）就是m.2的前称，而nvme是一种传输协议。</p>
-]]></content>
-      <tags>
-        <tag>DELL</tag>
-        <tag>搞机</tag>
-        <tag>win平板</tag>
-        <tag>避坑</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zsh的安装和简单配置</title>
-    <url>/post/88f7f195.html</url>
-    <content><![CDATA[<p>写在前面：本教程使用的是WSL2(Debian系统)，使用ArchLinux系或者RedHat系的操作系统可能在下面的操作中有些许不同之处。zsh有比bash更加丰富的扩展功能，在可自定义化和补全功能上都比bash要强大很多<del>(最重要的是zsh比bash的prompt好看多了)</del>。</p>
-<h2 id="一、下载zsh并设置其为默认shell"><a href="#一、下载zsh并设置其为默认shell" class="headerlink" title="一、下载zsh并设置其为默认shell"></a>一、下载zsh并设置其为默认shell</h2><ul>
-<li>下载zsh<br>下载zsh非常之简单，很多版本的Linux都提供了zsh的预编译包，可以通过系统的包管理器安装。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install zsh</span><br></pre></td></tr></table></figure>
-
-<p>如果你的Linux使用的是其他包管理工具，比如yum或是pacman，请自行查找教程。</p>
-<ul>
-<li><p>将zsh设置为默认shell<br>首先要检查zsh是否安装成功，输入命令<code>zsh --version</code>后如果有类似于下面的输出，那说明安装成功了。<br><img src="/image/post3/dd48fdedf7063619e1708387b1d60e71.png" alt="zsh-version"><br>之后就是输入命令让zsh成为默认shell。</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chsh -s /usr/bin/zsh</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>至此，zsh的下载安装已经完毕。</p>
-<h2 id="二、下载oh-my-zsh并进行插件和主题的配置"><a href="#二、下载oh-my-zsh并进行插件和主题的配置" class="headerlink" title="二、下载oh-my-zsh并进行插件和主题的配置"></a>二、下载oh-my-zsh并进行插件和主题的配置</h2><p>oh-my-zsh是一个开源的zsh配置管理框架，旨在帮助用户快速上手zsh，并通过丰富的插件和主题让命令行体验更加高效、美观和个性化。<del>(上述内容由ai生成)</del></p>
-<ul>
-<li><p>下载oh-my-zsh<br>如果你在国内，可以使用gitee的镜像</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://gitee.com/shmhlsy/oh-my-zsh-install.sh/raw/master/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>  如果你在国外或者就是想用github，使用以下命令：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>下载powerlevel10k<br>powerlevel10k是一个自定义化程度相当之高且方便使用的主题配置工具，和上面的一样，可以选择从github或者gitee来下载：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
-
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://gitee.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
-
-<p>  下载完毕之后，编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ZSH_THEME=&quot;主题名称&quot;</span><br><span class="line">#修改为：ZSH_THEME=&quot;powerlevel10k/powerlevel10k&quot;</span><br></pre></td></tr></table></figure>
-
-<p>  保存并退出后执行命令<code>source ~/.zshrc</code>后会让你自定义prompt外观。<br>  如果你之后又想进行外观的修改，可以输入命令：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">p10k configure</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>下载两个常用插件<br>先编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">plugins=(git) </span><br><span class="line">#修改为：plugins=(git zsh-autosuggestions zsh-syntax-highlighting)</span><br></pre></td></tr></table></figure>
-
-<p>  然后下载两个插件：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
-
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
-
-<p>  最后仍然是执行命令<code>source ~/.zshrc</code>使插件生效。</p>
-</li>
-</ul>
-<p>以上就是zsh的安装和简单的配置，放一个我配置完的zsh的效果图：<br><img src="/image/post3/95f4d3600abefc9525dc9d907f96f21f.png" alt="zsh-example"></p>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-        <tag>zsh</tag>
-        <tag>美化</tag>
-        <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>WSL2的安装和简单配置</title>
     <url>/post/87099e43.html</url>
     <content><![CDATA[<p>写在前面：本教程使用的是Windows11的系统，不保证Windows10也适用。</p>
@@ -124,45 +54,26 @@
 <p>最后输入<code>sudo apt update</code>和<code>sudo apt upgrade</code>命令即可验证软件源是否修改成功。</p>
 ]]></content>
       <tags>
-        <tag>Linux</tag>
-        <tag>教程</tag>
         <tag>WSL2</tag>
         <tag>Windows11</tag>
+        <tag>Linux</tag>
+        <tag>教程</tag>
       </tags>
   </entry>
   <entry>
-    <title>通过ssh连接VirtualBox的nat网络模式下的虚拟机</title>
-    <url>/post/46d9de96.html</url>
-    <content><![CDATA[<p>写在前面：因为这学期要上传奇史课os，课程要求使用OpenEuler系统，为了方便用vscode编程使用了ssh来连接虚拟机。折腾的过程中发现桥接模式会随着你网络环境他的变化而产生网段的变化导致ssh配置发生变动，而nat模式下的虚拟机ip不会产生改变。而使用nat网络模式来进行连接相对麻烦一点儿，故有了该文章。</p>
-<h2 id="一、设置端口转发"><a href="#一、设置端口转发" class="headerlink" title="一、设置端口转发"></a>一、设置端口转发</h2><p>因为nat模式下尽管虚拟机ping得通主机，但是主机ping不通虚拟机的话ssh连接仍然是不可行的，所以必须要先进行端口转发。<br><img src="/image/post4/faf3354a84b2e246498fc6d54d9b36a3.png" alt="ping不通"><br>设置端口转发也非常简单，首先点击VirtualBox左上角的<strong>管理</strong>，选择其中的<strong>工具</strong>，在工具的菜单栏中选择<strong>网络管理器</strong>。或者是直接使用快捷键<code>Ctrl+H</code>打开。<br><img src="/image/post4/2025-03-02211905.png" alt="网络管理器"><br>之后先点开<strong>属性</strong>，选择<strong>NAT网络</strong>，在下方选择<strong>端口转发</strong>，点击右边的”+“添加新规则。<br><img src="/image/post4/696a0650dd9826ab8672748c8fb4952e.png" alt="端口转发"><br>主机ip和子系统端口和上图保持一致，除非你ssh端口自定义了非22端口。主机端口可以自己改动，只要该端口没有被占用就行。需要注意的是子系统ip要和你的虚拟机保持一致。至于如何获得子系统的ip，需要打开子系统输入命令<code>ip addr</code>来查看，一般如果你没有进行特别的修改，ip都应该为<code>10.0.2.xx</code>。<br><img src="/image/post4/0959d4c2d5f800fd252dcea6d92442ac.png" alt="子系统ip"><br>输入好后，点击右下角的应用开始转发。</p>
-<h2 id="二、虚拟机的准备"><a href="#二、虚拟机的准备" class="headerlink" title="二、虚拟机的准备"></a>二、虚拟机的准备</h2><p>要想进行ssh连接，你的虚拟机必须要开启sshd服务，关于如何安装sshd服务请左转自行谷歌。<br>输入以下命令来设置ssh服务：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> sshd <span class="comment">#启用sshd开机自启动</span></span><br><span class="line">systemctl start sshd <span class="comment">#启用sshd服务</span></span><br><span class="line">systemctl status sshd <span class="comment">#查看sshd服务状态</span></span><br></pre></td></tr></table></figure>
-
-<p>最后你的sshd服务状态应该类似于下图：<br><img src="/image/post4/aeff68d211b9570b69abd352cbb28854.png" alt="sshd-status"></p>
-<h2 id="三、ssh相关设置"><a href="#三、ssh相关设置" class="headerlink" title="三、ssh相关设置"></a>三、ssh相关设置</h2><ul>
-<li><p>测试连接<br>现在在确保虚拟机开着的情况下可以进行ssh的连接了。在cmd中输入以下命令<code>ssh -p 你设置的主机端口号 username(你想用什么身份登陆你的虚拟机)@127.0.0.1</code>来测试连接，若提示你输入密码进行登录则说明连接成功。</p>
-</li>
-<li><p>配置密钥登录<br>如果不配置密钥，在vscode中打开一个文件夹就要输入一次密码，极其的麻烦。而且以后工作的时候肯定是使用安全的密钥登录，所以用密钥登陆是很有必要的。</p>
-<ul>
-<li><p>在cmd输入命令<code>ssh-keygen -t rsa -b 4096</code>生成一对rsa密钥(之后一直回车即可)，如果你之前已经生成了密钥了，那就用你之前的密钥就行。</p>
-</li>
-<li><p>进入<code>C/Users/你的用户名/.ssh</code>文件夹，你应该在这里能找到你之前生成的密钥对。在这里右键打开terminal，输入命令<code>scp -P 你设置的主机端口号 id_rsa.pub username@127.0.0.1:~(可以改成你想要的目录)</code>，这一步是将公钥文件传给你的虚拟机。</p>
-</li>
-<li><p>打开你的虚拟机，找到你传入的公钥文件，输入以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">cat</span> id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure></li>
-</ul>
-</li>
-<li><p>最后是对sshd的一些配置<br>修改<code>/etc/ssh/sshd_config</code>文件，将对应行修改成下面那样：</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">PermitRootLogin prohibit-password #限制不能使用密码登录root用户</span><br><span class="line">PubkeyAuthentication yes #允许使用公钥进行登录</span><br><span class="line">PasswordAuthentication no #禁止使用密码登录</span><br><span class="line">AllowTcpForwarding yes #允许进行ssh端口的tcp转发</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>之后再进行ssh连接，你会发现直接连接成功，最后在vscode输入之前的ssh连接命令即可成功远程登陆虚拟机。</p>
-<h2 id="四、踩过的坑"><a href="#四、踩过的坑" class="headerlink" title="四、踩过的坑"></a>四、踩过的坑</h2><p>因为我之前已经有了rsa密钥，我把生成的新的rsa密钥命名成了自定义的名字，然后发现怎么都连接不成功。搜索后发现原来ssh会按照一定顺序扫描已有的私钥，而自定义名字的私钥是最后扫描的，导致ssh在扫描到之前就认为你的私钥已经是错误的了(居然不是遍历！！！)。<br>这种情况需要在ssh连接命令中加入参数<code>-i</code>来指定你要使用的私钥来进行连接。</p>
+    <title>DELL Latitude 5290 2in1扩展硬盘避坑</title>
+    <url>/post/4a17b156.html</url>
+    <content><![CDATA[<p>PS：写这篇文章的原因是我在扩展这个平板的硬盘时就踩过坑，而且关于这台平板的文章在网上非常少且有些错误的地方。</p>
+<p>自从需要带着电脑出去干活的频率升高后就一直想搞个win平板玩玩，主要是方便带着出门加轻度办公<del>（其实主要原因是方便玩旮旯给木）</del>。为什么要选择傻多戴呢，无他，就是因为可以扩展硬盘而且二手也不贵（某鱼上1000多一点带键盘拿下，基本上是全新）。</p>
+<h2 id="关于硬盘位"><a href="#关于硬盘位" class="headerlink" title="关于硬盘位"></a>关于硬盘位</h2><p>关于大家最关心的扩展位硬盘的问题，这个硬盘位是wwan口，<strong>不支持sata协议，只支持nvme协议 pcie3.0，并且需要双缺口（B&amp;M key）的硬盘才能插得进去</strong>。规格我选择的是2242的（是短硬盘，平时大家看得多的长硬盘是2280规格的），2230的没试过，貌似也是可以的（别人有成功过）。根据硬盘的螺丝定位口来看，2242是刚刚好的。<br><img src="/image/post1/ae270d110612862760e6b359d714f10a429931853.jpg" alt="硬盘展示"></p>
+<h2 id="速度"><a href="#速度" class="headerlink" title="速度"></a>速度</h2><p>测速大家自己看吧<del>（主硬盘位商家给了一根sata协议的好黑心）</del><br><img src="/image/post1/e29d3ea9d3e14ea0f3912cba53f352ac429931853.png" alt="测速展示"></p>
+<p>在这里纠正一点，在别的文章有看到过把ngff和nvme放在一起说的，而实际上ngff和nvme不是并列关系，ngff（Next Generation Form Factor）就是m.2的前称，而nvme是一种传输协议。</p>
 ]]></content>
       <tags>
-        <tag>Linux</tag>
-        <tag>ssh</tag>
-        <tag>虚拟机</tag>
-        <tag>VirtualBox</tag>
+        <tag>DELL</tag>
+        <tag>搞机</tag>
+        <tag>win平板</tag>
+        <tag>避坑</tag>
       </tags>
   </entry>
   <entry>
@@ -198,6 +109,95 @@
         <tag>Linux</tag>
         <tag>网络攻防</tag>
         <tag>kali</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zsh的安装和简单配置</title>
+    <url>/post/88f7f195.html</url>
+    <content><![CDATA[<p>写在前面：本教程使用的是WSL2(Debian系统)，使用ArchLinux系或者RedHat系的操作系统可能在下面的操作中有些许不同之处。zsh有比bash更加丰富的扩展功能，在可自定义化和补全功能上都比bash要强大很多<del>(最重要的是zsh比bash的prompt好看多了)</del>。</p>
+<h2 id="一、下载zsh并设置其为默认shell"><a href="#一、下载zsh并设置其为默认shell" class="headerlink" title="一、下载zsh并设置其为默认shell"></a>一、下载zsh并设置其为默认shell</h2><ul>
+<li>下载zsh<br>下载zsh非常之简单，很多版本的Linux都提供了zsh的预编译包，可以通过系统的包管理器安装。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install zsh</span><br></pre></td></tr></table></figure>
+
+<p>如果你的Linux使用的是其他包管理工具，比如yum或是pacman，请自行查找教程。</p>
+<ul>
+<li><p>将zsh设置为默认shell<br>首先要检查zsh是否安装成功，输入命令<code>zsh --version</code>后如果有类似于下面的输出，那说明安装成功了。<br><img src="/image/post3/dd48fdedf7063619e1708387b1d60e71.png" alt="zsh-version"><br>之后就是输入命令让zsh成为默认shell。</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chsh -s /usr/bin/zsh</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>至此，zsh的下载安装已经完毕。</p>
+<h2 id="二、下载oh-my-zsh并进行插件和主题的配置"><a href="#二、下载oh-my-zsh并进行插件和主题的配置" class="headerlink" title="二、下载oh-my-zsh并进行插件和主题的配置"></a>二、下载oh-my-zsh并进行插件和主题的配置</h2><p>oh-my-zsh是一个开源的zsh配置管理框架，旨在帮助用户快速上手zsh，并通过丰富的插件和主题让命令行体验更加高效、美观和个性化。<del>(上述内容由ai生成)</del></p>
+<ul>
+<li><p>下载oh-my-zsh<br>如果你在国内，可以使用gitee的镜像</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://gitee.com/shmhlsy/oh-my-zsh-install.sh/raw/master/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>  如果你在国外或者就是想用github，使用以下命令：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载powerlevel10k<br>powerlevel10k是一个自定义化程度相当之高且方便使用的主题配置工具，和上面的一样，可以选择从github或者gitee来下载：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
+
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://gitee.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
+
+<p>  下载完毕之后，编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ZSH_THEME=&quot;主题名称&quot;</span><br><span class="line">#修改为：ZSH_THEME=&quot;powerlevel10k/powerlevel10k&quot;</span><br></pre></td></tr></table></figure>
+
+<p>  保存并退出后执行命令<code>source ~/.zshrc</code>后会让你自定义prompt外观。<br>  如果你之后又想进行外观的修改，可以输入命令：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">p10k configure</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载两个常用插件<br>先编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">plugins=(git) </span><br><span class="line">#修改为：plugins=(git zsh-autosuggestions zsh-syntax-highlighting)</span><br></pre></td></tr></table></figure>
+
+<p>  然后下载两个插件：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
+
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
+
+<p>  最后仍然是执行命令<code>source ~/.zshrc</code>使插件生效。</p>
+</li>
+</ul>
+<p>以上就是zsh的安装和简单的配置，放一个我配置完的zsh的效果图：<br><img src="/image/post3/95f4d3600abefc9525dc9d907f96f21f.png" alt="zsh-example"></p>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>教程</tag>
+        <tag>zsh</tag>
+        <tag>美化</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>通过ssh连接VirtualBox的nat网络模式下的虚拟机</title>
+    <url>/post/46d9de96.html</url>
+    <content><![CDATA[<p>写在前面：因为这学期要上传奇史课os，课程要求使用OpenEuler系统，为了方便用vscode编程使用了ssh来连接虚拟机。折腾的过程中发现桥接模式会随着你网络环境他的变化而产生网段的变化导致ssh配置发生变动，而nat模式下的虚拟机ip不会产生改变。而使用nat网络模式来进行连接相对麻烦一点儿，故有了该文章。</p>
+<h2 id="一、设置端口转发"><a href="#一、设置端口转发" class="headerlink" title="一、设置端口转发"></a>一、设置端口转发</h2><p>因为nat模式下尽管虚拟机ping得通主机，但是主机ping不通虚拟机的话ssh连接仍然是不可行的，所以必须要先进行端口转发。<br><img src="/image/post4/faf3354a84b2e246498fc6d54d9b36a3.png" alt="ping不通"><br>设置端口转发也非常简单，首先点击VirtualBox左上角的<strong>管理</strong>，选择其中的<strong>工具</strong>，在工具的菜单栏中选择<strong>网络管理器</strong>。或者是直接使用快捷键<code>Ctrl+H</code>打开。<br><img src="/image/post4/2025-03-02211905.png" alt="网络管理器"><br>之后先点开<strong>属性</strong>，选择<strong>NAT网络</strong>，在下方选择<strong>端口转发</strong>，点击右边的”+“添加新规则。<br><img src="/image/post4/696a0650dd9826ab8672748c8fb4952e.png" alt="端口转发"><br>主机ip和子系统端口和上图保持一致，除非你ssh端口自定义了非22端口。主机端口可以自己改动，只要该端口没有被占用就行。需要注意的是子系统ip要和你的虚拟机保持一致。至于如何获得子系统的ip，需要打开子系统输入命令<code>ip addr</code>来查看，一般如果你没有进行特别的修改，ip都应该为<code>10.0.2.xx</code>。<br><img src="/image/post4/0959d4c2d5f800fd252dcea6d92442ac.png" alt="子系统ip"><br>输入好后，点击右下角的应用开始转发。</p>
+<h2 id="二、虚拟机的准备"><a href="#二、虚拟机的准备" class="headerlink" title="二、虚拟机的准备"></a>二、虚拟机的准备</h2><p>要想进行ssh连接，你的虚拟机必须要开启sshd服务，关于如何安装sshd服务请左转自行谷歌。<br>输入以下命令来设置ssh服务：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> sshd <span class="comment">#启用sshd开机自启动</span></span><br><span class="line">systemctl start sshd <span class="comment">#启用sshd服务</span></span><br><span class="line">systemctl status sshd <span class="comment">#查看sshd服务状态</span></span><br></pre></td></tr></table></figure>
+
+<p>最后你的sshd服务状态应该类似于下图：<br><img src="/image/post4/aeff68d211b9570b69abd352cbb28854.png" alt="sshd-status"></p>
+<h2 id="三、ssh相关设置"><a href="#三、ssh相关设置" class="headerlink" title="三、ssh相关设置"></a>三、ssh相关设置</h2><ul>
+<li><p>测试连接<br>现在在确保虚拟机开着的情况下可以进行ssh的连接了。在cmd中输入以下命令<code>ssh -p 你设置的主机端口号 username(你想用什么身份登陆你的虚拟机)@127.0.0.1</code>来测试连接，若提示你输入密码进行登录则说明连接成功。</p>
+</li>
+<li><p>配置密钥登录<br>如果不配置密钥，在vscode中打开一个文件夹就要输入一次密码，极其的麻烦。而且以后工作的时候肯定是使用安全的密钥登录，所以用密钥登陆是很有必要的。</p>
+<ul>
+<li><p>在cmd输入命令<code>ssh-keygen -t rsa -b 4096</code>生成一对rsa密钥(之后一直回车即可)，如果你之前已经生成了密钥了，那就用你之前的密钥就行。</p>
+</li>
+<li><p>进入<code>C/Users/你的用户名/.ssh</code>文件夹，你应该在这里能找到你之前生成的密钥对。在这里右键打开terminal，输入命令<code>scp -P 你设置的主机端口号 id_rsa.pub username@127.0.0.1:~(可以改成你想要的目录)</code>，这一步是将公钥文件传给你的虚拟机。</p>
+</li>
+<li><p>打开你的虚拟机，找到你传入的公钥文件，输入以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> <span class="built_in">cat</span> id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>最后是对sshd的一些配置<br>修改<code>/etc/ssh/sshd_config</code>文件，将对应行修改成下面那样：</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">PermitRootLogin prohibit-password #限制不能使用密码登录root用户</span><br><span class="line">PubkeyAuthentication yes #允许使用公钥进行登录</span><br><span class="line">PasswordAuthentication no #禁止使用密码登录</span><br><span class="line">AllowTcpForwarding yes #允许进行ssh端口的tcp转发</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>之后再进行ssh连接，你会发现直接连接成功，最后在vscode输入之前的ssh连接命令即可成功远程登陆虚拟机。</p>
+<h2 id="四、踩过的坑"><a href="#四、踩过的坑" class="headerlink" title="四、踩过的坑"></a>四、踩过的坑</h2><p>因为我之前已经有了rsa密钥，我把生成的新的rsa密钥命名成了自定义的名字，然后发现怎么都连接不成功。搜索后发现原来ssh会按照一定顺序扫描已有的私钥，而自定义名字的私钥是最后扫描的，导致ssh在扫描到之前就认为你的私钥已经是错误的了(居然不是遍历！！！)。<br>这种情况需要在ssh连接命令中加入参数<code>-i</code>来指定你要使用的私钥来进行连接。</p>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>ssh</tag>
+        <tag>虚拟机</tag>
+        <tag>VirtualBox</tag>
       </tags>
   </entry>
 </search>
