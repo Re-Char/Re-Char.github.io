@@ -17,6 +17,60 @@
       </tags>
   </entry>
   <entry>
+    <title>zsh的安装和简单配置</title>
+    <url>/post/88f7f195.html</url>
+    <content><![CDATA[<p>写在前面：本教程使用的是WSL2(Debian系统)，使用ArchLinux系或者RedHat系的操作系统可能在下面的操作中有些许不同之处。zsh有比bash更加丰富的扩展功能，在可自定义化和补全功能上都比bash要强大很多<del>(最重要的是zsh比bash的prompt好看多了)</del>。</p>
+<h2 id="一、下载zsh并设置其为默认shell"><a href="#一、下载zsh并设置其为默认shell" class="headerlink" title="一、下载zsh并设置其为默认shell"></a>一、下载zsh并设置其为默认shell</h2><ul>
+<li>下载zsh<br>下载zsh非常之简单，很多版本的Linux都提供了zsh的预编译包，可以通过系统的包管理器安装。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install zsh</span><br></pre></td></tr></table></figure>
+
+<p>如果你的Linux使用的是其他包管理工具，比如yum或是pacman，请自行查找教程。</p>
+<ul>
+<li><p>将zsh设置为默认shell<br>首先要检查zsh是否安装成功，输入命令<code>zsh --version</code>后如果有类似于下面的输出，那说明安装成功了。<br><img src="/image/post3/dd48fdedf7063619e1708387b1d60e71.png" alt="zsh-version"><br>之后就是输入命令让zsh成为默认shell。</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chsh -s /usr/bin/zsh</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>至此，zsh的下载安装已经完毕。</p>
+<h2 id="二、下载oh-my-zsh并进行插件和主题的配置"><a href="#二、下载oh-my-zsh并进行插件和主题的配置" class="headerlink" title="二、下载oh-my-zsh并进行插件和主题的配置"></a>二、下载oh-my-zsh并进行插件和主题的配置</h2><p>oh-my-zsh是一个开源的zsh配置管理框架，旨在帮助用户快速上手zsh，并通过丰富的插件和主题让命令行体验更加高效、美观和个性化。<del>(上述内容由ai生成)</del></p>
+<ul>
+<li><p>下载oh-my-zsh<br>如果你在国内，可以使用gitee的镜像</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://gitee.com/shmhlsy/oh-my-zsh-install.sh/raw/master/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>  如果你在国外或者就是想用github，使用以下命令：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载powerlevel10k<br>powerlevel10k是一个自定义化程度相当之高且方便使用的主题配置工具，和上面的一样，可以选择从github或者gitee来下载：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
+
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://gitee.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
+
+<p>  下载完毕之后，编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ZSH_THEME=&quot;主题名称&quot;</span><br><span class="line">#修改为：ZSH_THEME=&quot;powerlevel10k/powerlevel10k&quot;</span><br></pre></td></tr></table></figure>
+
+<p>  保存并退出后执行命令<code>source ~/.zshrc</code>后会让你自定义prompt外观。<br>  如果你之后又想进行外观的修改，可以输入命令：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">p10k configure</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载两个常用插件<br>先编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">plugins=(git) </span><br><span class="line">#修改为：plugins=(git zsh-autosuggestions zsh-syntax-highlighting)</span><br></pre></td></tr></table></figure>
+
+<p>  然后下载两个插件：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
+
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
+
+<p>  最后仍然是执行命令<code>source ~/.zshrc</code>使插件生效。</p>
+</li>
+</ul>
+<p>以上就是zsh的安装和简单的配置，放一个我配置完的zsh的效果图：<br><img src="/image/post3/95f4d3600abefc9525dc9d907f96f21f.png" alt="zsh-example"></p>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>zsh</tag>
+        <tag>美化</tag>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>WSL2的安装和简单配置</title>
     <url>/post/87099e43.html</url>
     <content><![CDATA[<p>写在前面：本教程使用的是Windows11的系统，不保证Windows10也适用。</p>
@@ -70,64 +124,10 @@
 <p>最后输入<code>sudo apt update</code>和<code>sudo apt upgrade</code>命令即可验证软件源是否修改成功。</p>
 ]]></content>
       <tags>
+        <tag>Linux</tag>
+        <tag>教程</tag>
         <tag>WSL2</tag>
         <tag>Windows11</tag>
-        <tag>Linux</tag>
-        <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zsh的安装和简单配置</title>
-    <url>/post/88f7f195.html</url>
-    <content><![CDATA[<p>写在前面：本教程使用的是WSL2(Debian系统)，使用ArchLinux系或者RedHat系的操作系统可能在下面的操作中有些许不同之处。zsh有比bash更加丰富的扩展功能，在可自定义化和补全功能上都比bash要强大很多<del>(最重要的是zsh比bash的prompt好看多了)</del>。</p>
-<h2 id="一、下载zsh并设置其为默认shell"><a href="#一、下载zsh并设置其为默认shell" class="headerlink" title="一、下载zsh并设置其为默认shell"></a>一、下载zsh并设置其为默认shell</h2><ul>
-<li>下载zsh<br>下载zsh非常之简单，很多版本的Linux都提供了zsh的预编译包，可以通过系统的包管理器安装。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install zsh</span><br></pre></td></tr></table></figure>
-
-<p>如果你的Linux使用的是其他包管理工具，比如yum或是pacman，请自行查找教程。</p>
-<ul>
-<li><p>将zsh设置为默认shell<br>首先要检查zsh是否安装成功，输入命令<code>zsh --version</code>后如果有类似于下面的输出，那说明安装成功了。<br><img src="/image/post3/dd48fdedf7063619e1708387b1d60e71.png" alt="zsh-version"><br>之后就是输入命令让zsh成为默认shell。</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chsh -s /usr/bin/zsh</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>至此，zsh的下载安装已经完毕。</p>
-<h2 id="二、下载oh-my-zsh并进行插件和主题的配置"><a href="#二、下载oh-my-zsh并进行插件和主题的配置" class="headerlink" title="二、下载oh-my-zsh并进行插件和主题的配置"></a>二、下载oh-my-zsh并进行插件和主题的配置</h2><p>oh-my-zsh是一个开源的zsh配置管理框架，旨在帮助用户快速上手zsh，并通过丰富的插件和主题让命令行体验更加高效、美观和个性化。<del>(上述内容由ai生成)</del></p>
-<ul>
-<li><p>下载oh-my-zsh<br>如果你在国内，可以使用gitee的镜像</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://gitee.com/shmhlsy/oh-my-zsh-install.sh/raw/master/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>  如果你在国外或者就是想用github，使用以下命令：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>下载powerlevel10k<br>powerlevel10k是一个自定义化程度相当之高且方便使用的主题配置工具，和上面的一样，可以选择从github或者gitee来下载：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
-
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://gitee.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
-
-<p>  下载完毕之后，编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ZSH_THEME=&quot;主题名称&quot;</span><br><span class="line">#修改为：ZSH_THEME=&quot;powerlevel10k/powerlevel10k&quot;</span><br></pre></td></tr></table></figure>
-
-<p>  保存并退出后执行命令<code>source ~/.zshrc</code>后会让你自定义prompt外观。<br>  如果你之后又想进行外观的修改，可以输入命令：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">p10k configure</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>下载两个常用插件<br>先编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">plugins=(git) </span><br><span class="line">#修改为：plugins=(git zsh-autosuggestions zsh-syntax-highlighting)</span><br></pre></td></tr></table></figure>
-
-<p>  然后下载两个插件：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
-
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
-
-<p>  最后仍然是执行命令<code>source ~/.zshrc</code>使插件生效。</p>
-</li>
-</ul>
-<p>以上就是zsh的安装和简单的配置，放一个我配置完的zsh的效果图：<br><img src="/image/post3/95f4d3600abefc9525dc9d907f96f21f.png" alt="zsh-example"></p>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-        <tag>教程</tag>
-        <tag>zsh</tag>
-        <tag>美化</tag>
       </tags>
   </entry>
   <entry>
