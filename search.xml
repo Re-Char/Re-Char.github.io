@@ -1,132 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>yolov5环境配置教程</title>
-    <url>/post/9807c50b.html</url>
-    <content><![CDATA[<p>写在前面：本学期因为大创需要使用yolov模型来进行相关的工作，故记录如下。使用的系统为Ubuntu18.04.</p>
-<h2 id="1-安装Anaconda"><a href="#1-安装Anaconda" class="headerlink" title="1.安装Anaconda"></a>1.安装Anaconda</h2><ul>
-<li><p>访问<a href="https://repo.anaconda.com/archive/Anaconda3-2024.10-1-Linux-x86_64.sh">Anaconda官网下载合适版本</a>。</p>
+    <title>LeetCode刷题笔记(一): 贪心</title>
+    <url>/post/4d5c39be.html</url>
+    <content><![CDATA[<p>贪心算法的核心思想：局部最优以实现全局最优。</p>
+<h2 id="一、分配问题"><a href="#一、分配问题" class="headerlink" title="一、分配问题"></a>一、分配问题</h2><ul>
+<li><p>题目：<br>n 个孩子站成一排。给你一个整数数组 ratings 表示每个孩子的评分。<br>你需要按照以下要求，给这些孩子分发糖果：<br>①每个孩子至少分配到 1 个糖果。<br>②相邻两个孩子中，评分更高的那个会获得更多的糖果。<br>请你给每个孩子分发糖果，计算并返回需要准备的最少糖果数目。</p>
+<p>解答：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">candy</span><span class="params">(vector&lt;<span class="type">int</span>&gt; &amp;ratings)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> n = ratings.<span class="built_in">size</span>();</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">candies</span><span class="params">(n, <span class="number">1</span>)</span></span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; n; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (ratings[i] &gt; ratings[i - <span class="number">1</span>]) &#123;</span><br><span class="line">                candies[i] = candies[i - <span class="number">1</span>] + <span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = n - <span class="number">1</span>; i &gt; <span class="number">0</span>; --i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (ratings[i] &lt; ratings[i - <span class="number">1</span>]) &#123;</span><br><span class="line">                candies[i - <span class="number">1</span>] = <span class="built_in">max</span>(candies[i - <span class="number">1</span>], candies[i] + <span class="number">1</span>);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">accumulate</span>(candies.<span class="built_in">begin</span>(), candies.<span class="built_in">end</span>(), <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;;</span><br></pre></td></tr></table></figure>
+<p>提示：两次遍历，每次只用关注相邻的一边即可。</p>
 </li>
-<li><p>导航到下载目录：使用cd命令导航到下载目录。例如，如果下载文件在Downloads目录下：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Downloads</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>运行安装脚本：使用bash命令运行下载的安装脚本：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bash Anaconda3-2024.10-1-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>阅读并接受许可协议：在安装过程中，会显示许可协议，按q键跳过，然后输入yes接受协议。</p>
-</li>
-<li><p>选择安装路径：默认安装路径是&#x2F;home&#x2F;your_username&#x2F;anaconda3，可以按Enter接受默认路径，或者输入其他路径。</p>
-</li>
-<li><p>初始化Anaconda：安装完成后，系统会提示是否初始化Anaconda，输入yes以启用。</p>
-</li>
-<li><p>更新环境变量：安装完成后，关闭并重新打开终端，或者运行以下命令使环境变量生效：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>验证安装：在终端中输入以下命令，检查Anaconda是否安装成功：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda --version</span><br></pre></td></tr></table></figure>
-
-<p>  如果安装成功，会显示Anaconda的版本号。</p>
-</li>
-<li><p>创建虚拟环境：打开终端，输入以下命令创建一个名为yolov5的虚拟环境，并指定Python版本为3.12(官方的文档里说明的是python版本大于等于3.8.0)：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda create -n yolov5 python=3.12</span><br><span class="line">conda activate yolov5</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="2-安装pytorch"><a href="#2-安装pytorch" class="headerlink" title="2.安装pytorch"></a>2.安装pytorch</h2><ul>
-<li><p>安装PyTorch(官方的文档里说明的是pytorch版本大于等于1.8)：如果你可以直连n卡(比如真机，双系统和使用了kvm虚拟化的wsl)，下载GPU版本的pytorch：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia</span><br></pre></td></tr></table></figure>
-
-<p>  否则使用CPU版本的pytorch：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda install pytorch torchvision torchaudio cpuonly -c pytorch</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="3-安装相关依赖"><a href="#3-安装相关依赖" class="headerlink" title="3.安装相关依赖"></a>3.安装相关依赖</h2><ul>
-<li><p>安装依赖：在YOLOv5项目根目录下，运行以下命令安装所有必需的Python包：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="4-验证安装"><a href="#4-验证安装" class="headerlink" title="4.验证安装"></a>4.验证安装</h2><ul>
-<li><p>下载预训练模型：从YOLOv5的GitHub发布页面下载预训练模型，并将其放置在YOLOv5项目目录下。</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/ultralytics/yolov5/releases/download/v6.2/yolov5s.pt</span><br></pre></td></tr></table></figure>
+<h2 id="二、区间问题"><a href="#二、区间问题" class="headerlink" title="二、区间问题"></a>二、区间问题</h2><ul>
+<li><p>题目：<br>给定一个区间的集合 intervals ，其中 intervals[i] &#x3D; [starti, endi] 。返回需要移除区间的最小数量，使剩余区间互不重叠。<br>注意：只在一点上接触的区间是不重叠的。例如 [1, 2] 和 [2, 3] 是不重叠的。</p>
+<p>解答：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">eraseOverlapIntervals</span><span class="params">(vector&lt;vector&lt;<span class="type">int</span>&gt;&gt;&amp; intervals)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">sort</span>(intervals.<span class="built_in">begin</span>(), intervals.<span class="built_in">end</span>(), [](vector&lt;<span class="type">int</span>&gt; &amp;a, vector&lt;<span class="type">int</span>&gt; &amp;b)</span><br><span class="line">             &#123; <span class="keyword">return</span> a[<span class="number">1</span>] &lt; b[<span class="number">1</span>]; &#125;);</span><br><span class="line">        <span class="type">int</span> prev = intervals[<span class="number">0</span>][<span class="number">1</span>];</span><br><span class="line">        <span class="type">int</span> count = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span> (vector&lt;<span class="type">int</span>&gt; interval : intervals) &#123;</span><br><span class="line">            <span class="keyword">if</span> (interval[<span class="number">0</span>] &lt; prev)</span><br><span class="line">                count++;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                prev = interval[<span class="number">1</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> count - <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>提示：要做到尽量互不重叠即需要保留end越小越好。</p>
 </li>
-<li><p>验证安装：运行一个简单的推理脚本来验证YOLOv5是否正确安装：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python detect.py --<span class="built_in">source</span> ./datahttps://my-github-blog.oss-cn-hangzhou.aliyuncs.coms/ --weights ./yolov5s.pt</span><br></pre></td></tr></table></figure></li>
 </ul>
-<h2 id="5-相关的官方链接"><a href="#5-相关的官方链接" class="headerlink" title="5.相关的官方链接"></a>5.相关的官方链接</h2><ul>
-<li>源仓库的github链接：<a href="https://github.com/ultralytics/yolov5">yolov5源仓库</a></li>
-<li>官方教程文档：<a href="https://docs.ultralytics.com/zh/yolov5/">yolov5教程</a></li>
+<h2 id="三、练习"><a href="#三、练习" class="headerlink" title="三、练习"></a>三、练习</h2><ul>
+<li><p>题目一：<br>给你一个整数数组 prices ，其中 prices[i] 表示某支股票第 i 天的价格。<br>在每一天，你可以决定是否购买和&#x2F;或出售股票。你在任何时候最多只能持有一股股票。你也可以先购买，然后在同一天出售。<br>返回你能获得的最大利润 。</p>
+<p>解答：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">maxProfit</span><span class="params">(vector&lt;<span class="type">int</span>&gt;&amp; prices)</span> </span>&#123;</span><br><span class="line">        <span class="type">int</span> sum = <span class="number">0</span>;</span><br><span class="line">        <span class="type">int</span> prev = prices[<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; prices.<span class="built_in">size</span>(); i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (prices[i] &lt; prev) &#123;</span><br><span class="line">                prev = prices[i];</span><br><span class="line">                <span class="keyword">continue</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            sum += (prices[i] - prev);</span><br><span class="line">            prev = prices[i];</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> sum;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>提示：动态规划 is always right。</p>
+</li>
+<li><p>题目二：<br>给你一个字符串 s 。我们要把这个字符串划分为尽可能多的片段，同一字母最多出现在一个片段中。例如，字符串 “ababcc” 能够被分为 [“abab”, “cc”]，但类似 [“aba”, “bcc”] 或 [“ab”, “ab”, “cc”] 的划分是非法的。<br>注意，划分结果需要满足：将所有划分结果按顺序连接，得到的字符串仍然是 s 。<br>返回一个表示每个字符串片段的长度的列表。</p>
+<p>解答：</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Solution</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">partitionLabels</span><span class="params">(string s)</span> </span>&#123;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">hash1</span><span class="params">(<span class="number">26</span>, <span class="number">-1</span>)</span></span>;</span><br><span class="line">        <span class="function">vector&lt;<span class="type">int</span>&gt; <span class="title">hash2</span><span class="params">(<span class="number">26</span>, <span class="number">-1</span>)</span></span>;</span><br><span class="line">        vector&lt;vector&lt;<span class="type">int</span>&gt;&gt; intervals;</span><br><span class="line">        intervals.<span class="built_in">reserve</span>(<span class="number">52</span>);</span><br><span class="line">        <span class="type">int</span> length = s.<span class="built_in">length</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = length - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) &#123;</span><br><span class="line">            <span class="keyword">if</span> (hash1[s[i] - <span class="string">&#x27;a&#x27;</span>] == <span class="number">-1</span>)</span><br><span class="line">                hash1[s[i] - <span class="string">&#x27;a&#x27;</span>] = i;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; length; i ++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (hash2[s[i] - <span class="string">&#x27;a&#x27;</span>] == <span class="number">-1</span>) &#123;</span><br><span class="line">                hash2[s[i] - <span class="string">&#x27;a&#x27;</span>] = i;</span><br><span class="line">                vector&lt;<span class="type">int</span>&gt; interval = &#123;hash2[s[i] - <span class="string">&#x27;a&#x27;</span>], hash1[s[i] - <span class="string">&#x27;a&#x27;</span>]&#125;;</span><br><span class="line">                intervals.<span class="built_in">push_back</span>(interval);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        vector&lt;<span class="type">int</span>&gt; res;</span><br><span class="line">        res.<span class="built_in">reserve</span>(length);</span><br><span class="line">        <span class="type">int</span> start = intervals[<span class="number">0</span>][<span class="number">0</span>];</span><br><span class="line">        <span class="type">int</span> prev = intervals[<span class="number">0</span>][<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">1</span>; i &lt; intervals.<span class="built_in">size</span>(); i ++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (intervals[i][<span class="number">0</span>] &lt; prev) </span><br><span class="line">                prev = prev &gt; intervals[i][<span class="number">1</span>] ? prev : intervals[i][<span class="number">1</span>];</span><br><span class="line">            <span class="keyword">else</span> &#123;</span><br><span class="line">                res.<span class="built_in">push_back</span>(prev - start + <span class="number">1</span>);</span><br><span class="line">                start = intervals[i][<span class="number">0</span>];</span><br><span class="line">                prev = intervals[i][<span class="number">1</span>];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        res.<span class="built_in">push_back</span>(prev - start + <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>提示：记录开始和结束位置转化为区间问题。</p>
+</li>
 </ul>
 ]]></content>
       <tags>
-        <tag>Linux</tag>
-        <tag>yolov</tag>
-        <tag>教程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>DELL Latitude 5290 2in1扩展硬盘避坑</title>
-    <url>/post/4a17b156.html</url>
-    <content><![CDATA[<p>PS：写这篇文章的原因是我在扩展这个平板的硬盘时就踩过坑，而且关于这台平板的文章在网上非常少且有些错误的地方。</p>
-<p>自从需要带着电脑出去干活的频率升高后就一直想搞个win平板玩玩，主要是方便带着出门加轻度办公<del>（其实主要原因是方便玩旮旯给木）</del>。为什么要选择傻多戴呢，无他，就是因为可以扩展硬盘而且二手也不贵（某鱼上1000多一点带键盘拿下，基本上是全新）。</p>
-<h2 id="关于硬盘位"><a href="#关于硬盘位" class="headerlink" title="关于硬盘位"></a>关于硬盘位</h2><p>关于大家最关心的扩展位硬盘的问题，这个硬盘位是wwan口，<strong>不支持sata协议，只支持nvme协议 pcie3.0，并且需要双缺口（B&amp;M key）的硬盘才能插得进去</strong>。规格我选择的是2242的（是短硬盘，平时大家看得多的长硬盘是2280规格的），2230的没试过，貌似也是可以的（别人有成功过）。根据硬盘的螺丝定位口来看，2242是刚刚好的。<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post1/ae270d110612862760e6b359d714f10a429931853.jpg" alt="硬盘展示"></p>
-<h2 id="速度"><a href="#速度" class="headerlink" title="速度"></a>速度</h2><p>测速大家自己看吧<del>（主硬盘位商家给了一根sata协议的好黑心）</del><br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post1/e29d3ea9d3e14ea0f3912cba53f352ac429931853.png" alt="测速展示"></p>
-<p>在这里纠正一点，在别的文章有看到过把ngff和nvme放在一起说的，而实际上ngff和nvme不是并列关系，ngff（Next Generation Form Factor）就是m.2的前称，而nvme是一种传输协议。</p>
-]]></content>
-      <tags>
-        <tag>DELL</tag>
-        <tag>搞机</tag>
-        <tag>win平板</tag>
-        <tag>避坑</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>zsh的安装和简单配置</title>
-    <url>/post/88f7f195.html</url>
-    <content><![CDATA[<p>写在前面：本教程使用的是WSL2(Debian系统)，使用ArchLinux系或者RedHat系的操作系统可能在下面的操作中有些许不同之处。zsh有比bash更加丰富的扩展功能，在可自定义化和补全功能上都比bash要强大很多<del>(最重要的是zsh比bash的prompt好看多了)</del>。</p>
-<h2 id="一、下载zsh并设置其为默认shell"><a href="#一、下载zsh并设置其为默认shell" class="headerlink" title="一、下载zsh并设置其为默认shell"></a>一、下载zsh并设置其为默认shell</h2><ul>
-<li>下载zsh<br>下载zsh非常之简单，很多版本的Linux都提供了zsh的预编译包，可以通过系统的包管理器安装。</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install zsh</span><br></pre></td></tr></table></figure>
-
-<p>如果你的Linux使用的是其他包管理工具，比如yum或是pacman，请自行查找教程。</p>
-<ul>
-<li><p>将zsh设置为默认shell<br>首先要检查zsh是否安装成功，输入命令<code>zsh --version</code>后如果有类似于下面的输出，那说明安装成功了。<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post3/dd48fdedf7063619e1708387b1d60e71.png" alt="zsh-version"><br>之后就是输入命令让zsh成为默认shell。</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chsh -s /usr/bin/zsh</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>至此，zsh的下载安装已经完毕。</p>
-<h2 id="二、下载oh-my-zsh并进行插件和主题的配置"><a href="#二、下载oh-my-zsh并进行插件和主题的配置" class="headerlink" title="二、下载oh-my-zsh并进行插件和主题的配置"></a>二、下载oh-my-zsh并进行插件和主题的配置</h2><p>oh-my-zsh是一个开源的zsh配置管理框架，旨在帮助用户快速上手zsh，并通过丰富的插件和主题让命令行体验更加高效、美观和个性化。<del>(上述内容由ai生成)</del></p>
-<ul>
-<li><p>下载oh-my-zsh<br>如果你在国内，可以使用gitee的镜像</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://gitee.com/shmhlsy/oh-my-zsh-install.sh/raw/master/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>  如果你在国外或者就是想用github，使用以下命令：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>下载powerlevel10k<br>powerlevel10k是一个自定义化程度相当之高且方便使用的主题配置工具，和上面的一样，可以选择从github或者gitee来下载：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
-
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://gitee.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
-
-<p>  下载完毕之后，编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ZSH_THEME=&quot;主题名称&quot;</span><br><span class="line">#修改为：ZSH_THEME=&quot;powerlevel10k/powerlevel10k&quot;</span><br></pre></td></tr></table></figure>
-
-<p>  保存并退出后执行命令<code>source ~/.zshrc</code>后会让你自定义prompt外观。<br>  如果你之后又想进行外观的修改，可以输入命令：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">p10k configure</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>下载两个常用插件<br>先编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
-  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">plugins=(git) </span><br><span class="line">#修改为：plugins=(git zsh-autosuggestions zsh-syntax-highlighting)</span><br></pre></td></tr></table></figure>
-
-<p>  然后下载两个插件：</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
-
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
-
-<p>  最后仍然是执行命令<code>source ~/.zshrc</code>使插件生效。</p>
-</li>
-</ul>
-<p>以上就是zsh的安装和简单的配置，放一个我配置完的zsh的效果图：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post3/95f4d3600abefc9525dc9d907f96f21f.png" alt="zsh-example"></p>
-]]></content>
-      <tags>
-        <tag>Linux</tag>
-        <tag>教程</tag>
-        <tag>zsh</tag>
-        <tag>美化</tag>
+        <tag>算法</tag>
+        <tag>LeetCode</tag>
+        <tag>贪心</tag>
       </tags>
   </entry>
   <entry>
@@ -183,10 +91,165 @@
 <p>最后输入<code>sudo apt update</code>和<code>sudo apt upgrade</code>命令即可验证软件源是否修改成功。</p>
 ]]></content>
       <tags>
-        <tag>Linux</tag>
-        <tag>教程</tag>
         <tag>WSL2</tag>
         <tag>Windows11</tag>
+        <tag>Linux</tag>
+        <tag>教程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>yolov5环境配置教程</title>
+    <url>/post/9807c50b.html</url>
+    <content><![CDATA[<p>写在前面：本学期因为大创需要使用yolov模型来进行相关的工作，故记录如下。使用的系统为Ubuntu18.04.</p>
+<h2 id="1-安装Anaconda"><a href="#1-安装Anaconda" class="headerlink" title="1.安装Anaconda"></a>1.安装Anaconda</h2><ul>
+<li><p>访问<a href="https://repo.anaconda.com/archive/Anaconda3-2024.10-1-Linux-x86_64.sh">Anaconda官网下载合适版本</a>。</p>
+</li>
+<li><p>导航到下载目录：使用cd命令导航到下载目录。例如，如果下载文件在Downloads目录下：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/Downloads</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行安装脚本：使用bash命令运行下载的安装脚本：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">bash Anaconda3-2024.10-1-Linux-x86_64.sh</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>阅读并接受许可协议：在安装过程中，会显示许可协议，按q键跳过，然后输入yes接受协议。</p>
+</li>
+<li><p>选择安装路径：默认安装路径是&#x2F;home&#x2F;your_username&#x2F;anaconda3，可以按Enter接受默认路径，或者输入其他路径。</p>
+</li>
+<li><p>初始化Anaconda：安装完成后，系统会提示是否初始化Anaconda，输入yes以启用。</p>
+</li>
+<li><p>更新环境变量：安装完成后，关闭并重新打开终端，或者运行以下命令使环境变量生效：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>验证安装：在终端中输入以下命令，检查Anaconda是否安装成功：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda --version</span><br></pre></td></tr></table></figure>
+
+<p>  如果安装成功，会显示Anaconda的版本号。</p>
+</li>
+<li><p>创建虚拟环境：打开终端，输入以下命令创建一个名为yolov5的虚拟环境，并指定Python版本为3.12(官方的文档里说明的是python版本大于等于3.8.0)：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda create -n yolov5 python=3.12</span><br><span class="line">conda activate yolov5</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="2-安装pytorch"><a href="#2-安装pytorch" class="headerlink" title="2.安装pytorch"></a>2.安装pytorch</h2><ul>
+<li><p>安装PyTorch(官方的文档里说明的是pytorch版本大于等于1.8)：如果你可以直连n卡(比如真机，双系统和使用了kvm虚拟化的wsl)，下载GPU版本的pytorch：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda install pytorch torchvision torchaudio pytorch-cuda=11.7 -c pytorch -c nvidia</span><br></pre></td></tr></table></figure>
+
+<p>  否则使用CPU版本的pytorch：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">conda install pytorch torchvision torchaudio cpuonly -c pytorch</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="3-安装相关依赖"><a href="#3-安装相关依赖" class="headerlink" title="3.安装相关依赖"></a>3.安装相关依赖</h2><ul>
+<li><p>安装依赖：在YOLOv5项目根目录下，运行以下命令安装所有必需的Python包：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">pip install -r requirements.txt</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="4-验证安装"><a href="#4-验证安装" class="headerlink" title="4.验证安装"></a>4.验证安装</h2><ul>
+<li><p>下载预训练模型：从YOLOv5的GitHub发布页面下载预训练模型，并将其放置在YOLOv5项目目录下。</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">wget https://github.com/ultralytics/yolov5/releases/download/v6.2/yolov5s.pt</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>验证安装：运行一个简单的推理脚本来验证YOLOv5是否正确安装：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">python detect.py --<span class="built_in">source</span> ./datahttps://my-github-blog.oss-cn-hangzhou.aliyuncs.coms/ --weights ./yolov5s.pt</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="5-相关的官方链接"><a href="#5-相关的官方链接" class="headerlink" title="5.相关的官方链接"></a>5.相关的官方链接</h2><ul>
+<li>源仓库的github链接：<a href="https://github.com/ultralytics/yolov5">yolov5源仓库</a></li>
+<li>官方教程文档：<a href="https://docs.ultralytics.com/zh/yolov5/">yolov5教程</a></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>教程</tag>
+        <tag>yolov</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DELL Latitude 5290 2in1扩展硬盘避坑</title>
+    <url>/post/4a17b156.html</url>
+    <content><![CDATA[<p>PS：写这篇文章的原因是我在扩展这个平板的硬盘时就踩过坑，而且关于这台平板的文章在网上非常少且有些错误的地方。</p>
+<p>自从需要带着电脑出去干活的频率升高后就一直想搞个win平板玩玩，主要是方便带着出门加轻度办公<del>（其实主要原因是方便玩旮旯给木）</del>。为什么要选择傻多戴呢，无他，就是因为可以扩展硬盘而且二手也不贵（某鱼上1000多一点带键盘拿下，基本上是全新）。</p>
+<h2 id="关于硬盘位"><a href="#关于硬盘位" class="headerlink" title="关于硬盘位"></a>关于硬盘位</h2><p>关于大家最关心的扩展位硬盘的问题，这个硬盘位是wwan口，<strong>不支持sata协议，只支持nvme协议 pcie3.0，并且需要双缺口（B&amp;M key）的硬盘才能插得进去</strong>。规格我选择的是2242的（是短硬盘，平时大家看得多的长硬盘是2280规格的），2230的没试过，貌似也是可以的（别人有成功过）。根据硬盘的螺丝定位口来看，2242是刚刚好的。<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post1/ae270d110612862760e6b359d714f10a429931853.jpg" alt="硬盘展示"></p>
+<h2 id="速度"><a href="#速度" class="headerlink" title="速度"></a>速度</h2><p>测速大家自己看吧<del>（主硬盘位商家给了一根sata协议的好黑心）</del><br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post1/e29d3ea9d3e14ea0f3912cba53f352ac429931853.png" alt="测速展示"></p>
+<p>在这里纠正一点，在别的文章有看到过把ngff和nvme放在一起说的，而实际上ngff和nvme不是并列关系，ngff（Next Generation Form Factor）就是m.2的前称，而nvme是一种传输协议。</p>
+]]></content>
+      <tags>
+        <tag>DELL</tag>
+        <tag>搞机</tag>
+        <tag>win平板</tag>
+        <tag>避坑</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>当当网数据爬取脚本</title>
+    <url>/post/7d2474f8.html</url>
+    <content><![CDATA[<p>写在前面：因为这学期上了软院传奇屎课软工2，为了更好地展示大作业(图书商城)的效果，故写了个爬虫爬取了当当网的数据。</p>
+<h2 id="一、获取Cookie"><a href="#一、获取Cookie" class="headerlink" title="一、获取Cookie"></a>一、获取Cookie</h2><p>因为不登陆的话当当网是有访问次数限制的，所以需要获取个人Cookie来维持登录状态。Cookie的获取非常简单，只需要在浏览器登录当当网后按下f12打开开发者工具，选择网络后再刷新一下页面，选择其中某一个元素就能查看到Cookie。</p>
+<p><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post7/e9f5d94557761a286babeecadcfdbbb4.png" alt="获取cookie"></p>
+<p>相关的登陆代码大致如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="variable language_">self</span>.session = requests.Session()</span><br><span class="line">    <span class="variable language_">self</span>.headers = &#123; <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36&#x27;</span>&#125;</span><br><span class="line">    <span class="variable language_">self</span>.session.headers.update(<span class="variable language_">self</span>.headers)   </span><br><span class="line">    <span class="comment"># 直接从cookie.txt加载Cookie</span></span><br><span class="line">    <span class="variable language_">self</span>.load_cookies_from_file()</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_cookies_from_file</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;从cookie.txt文件加载Cookie数据&quot;&quot;&quot;</span></span><br><span class="line">    cookie_file = <span class="string">&quot;cookie.txt&quot;</span></span><br><span class="line">    <span class="keyword">if</span> os.path.exists(cookie_file):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(cookie_file, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                cookie_str = f.read().strip()</span><br><span class="line">                <span class="keyword">if</span> cookie_str:</span><br><span class="line">                    <span class="comment"># 解析Cookie字符串并添加到会话中</span></span><br><span class="line">                    cookies = &#123;&#125;</span><br><span class="line">                    <span class="keyword">for</span> item <span class="keyword">in</span> cookie_str.split(<span class="string">&#x27;;&#x27;</span>):</span><br><span class="line">                        <span class="keyword">if</span> item:</span><br><span class="line">                            item = item.strip()</span><br><span class="line">                            <span class="keyword">if</span> <span class="string">&#x27;=&#x27;</span> <span class="keyword">in</span> item:</span><br><span class="line">                                key, value = item.split(<span class="string">&#x27;=&#x27;</span>, <span class="number">1</span>)</span><br><span class="line">                                cookies[key] = value</span><br><span class="line">                        </span><br><span class="line">                    <span class="comment"># 将Cookie添加到会话</span></span><br><span class="line">                    <span class="variable language_">self</span>.session.cookies.update(cookies)</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">&quot;已从cookie.txt加载Cookie数据&quot;</span>)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">&quot;cookie.txt文件为空&quot;</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;加载Cookie数据失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;未找到cookie.txt文件，将使用无登录状态访问&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;提示: 请从浏览器开发者工具中复制Cookie并保存到同目录的cookie.txt文件中&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="二、分析网页元素"><a href="#二、分析网页元素" class="headerlink" title="二、分析网页元素"></a>二、分析网页元素</h2><p>这步更简单，只需要分析网页结构即可<del>(剩下的交给ai)</del>。下面以爬某个商品的图片链接来说明：打开商品详情页面，对准商品图片按下鼠标右键，在选项框里选择“检查”，</p>
+<p><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post7/2025-06-25%20181702.png" alt="检查"></p>
+<p>然后在弹出的开发者工具中就会显示图片对应的网页结构，</p>
+<p><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post7/dd74f6e7de8e2a17d0d90a7967218603.png" alt="图片网页结构"></p>
+<p>从html文件中可以看到商品图片对应的模块是id为<code>largePic</code>的<code>img</code>块，我们可以给ai描述为“从id为largePic的img块中获取src的内容，并在链接前面添加‘https:’。”</p>
+<p>获取链接的核心代码如下(使用了<code>BeautifulSoup</code>包)：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cover_elem = soup.select_one(<span class="string">&#x27;img#largePic&#x27;</span>)</span><br><span class="line"><span class="keyword">if</span> cover_elem <span class="keyword">and</span> cover_elem.has_attr(<span class="string">&#x27;src&#x27;</span>):</span><br><span class="line">    src = cover_elem[<span class="string">&#x27;src&#x27;</span>]</span><br><span class="line">    product_info[<span class="string">&quot;cover&quot;</span>] = <span class="string">f&quot;https:<span class="subst">&#123;src&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>其余的相关信息也是依法炮制，比如要获取标题信息就对标题进行检查，要获取作者信息就对准作者信息进行检查，这里给出我获取的一些商品信息的代码：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">extract_product_info</span>(<span class="params">self, url: <span class="built_in">str</span></span>) -&gt; <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;从商品页面提取详细信息&quot;&quot;&quot;</span></span><br><span class="line">    soup = <span class="variable language_">self</span>.fetch_page(url)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> soup:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="comment"># 初始化商品信息字典</span></span><br><span class="line">    product_info = &#123;</span><br><span class="line">        <span class="string">&quot;title&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">        <span class="string">&quot;price&quot;</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">&quot;rate&quot;</span>: <span class="number">6</span>,  <span class="comment"># 根据要求默认为6</span></span><br><span class="line">        <span class="string">&quot;description&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">        <span class="string">&quot;cover&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">        <span class="string">&quot;detail&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">        <span class="string">&quot;specifications&quot;</span>: [</span><br><span class="line">            &#123;<span class="string">&quot;item&quot;</span>: <span class="string">&quot;作者&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;item&quot;</span>: <span class="string">&quot;副标题&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;&quot;</span>&#125;,  <span class="comment"># 根据要求设置为空字符串</span></span><br><span class="line">            &#123;<span class="string">&quot;item&quot;</span>: <span class="string">&quot;ISBN&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;item&quot;</span>: <span class="string">&quot;帧装&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;item&quot;</span>: <span class="string">&quot;页数&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;&quot;</span>&#125;,  <span class="comment"># 根据要求设置为空字符串</span></span><br><span class="line">            &#123;<span class="string">&quot;item&quot;</span>: <span class="string">&quot;出版社&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;item&quot;</span>: <span class="string">&quot;出版日期&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;&quot;</span>&#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># ①提取title</span></span><br><span class="line">    title_elem = soup.select_one(<span class="string">&#x27;div.name_info h1&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> title_elem <span class="keyword">and</span> title_elem.has_attr(<span class="string">&#x27;title&#x27;</span>):</span><br><span class="line">        full_title = title_elem[<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line">        <span class="comment"># 确保full_title是字符串</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(full_title, <span class="built_in">list</span>):</span><br><span class="line">            full_title = <span class="string">&#x27;&#x27;</span>.join(full_title)</span><br><span class="line">            <span class="comment"># 处理title，截取到第一个&#x27;（&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;（&#x27;</span> <span class="keyword">in</span> full_title:</span><br><span class="line">            product_info[<span class="string">&quot;title&quot;</span>] = full_title.split(<span class="string">&#x27;（&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">elif</span> <span class="string">&#x27;(&#x27;</span> <span class="keyword">in</span> full_title:</span><br><span class="line">            product_info[<span class="string">&quot;title&quot;</span>] = full_title.split(<span class="string">&#x27;(&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">elif</span> <span class="string">&#x27; &#x27;</span> <span class="keyword">in</span> full_title:</span><br><span class="line">            product_info[<span class="string">&quot;title&quot;</span>] = full_title.split(<span class="string">&#x27; &#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            product_info[<span class="string">&quot;title&quot;</span>] = full_title</span><br><span class="line">    <span class="comment"># ②提取price</span></span><br><span class="line">    price_elem = soup.select_one(<span class="string">&#x27;p#dd-price&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> price_elem:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 提取数字部分</span></span><br><span class="line">            price_text = <span class="string">&#x27;&#x27;</span>.join(c <span class="keyword">for</span> c <span class="keyword">in</span> price_elem.text <span class="keyword">if</span> c.isdigit() <span class="keyword">or</span> c == <span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">            product_info[<span class="string">&quot;price&quot;</span>] = <span class="built_in">float</span>(price_text)</span><br><span class="line">        <span class="keyword">except</span> ValueError:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># ④提取description</span></span><br><span class="line">    desc_elem = soup.select_one(<span class="string">&#x27;span.head_title_name&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> desc_elem <span class="keyword">and</span> desc_elem.has_attr(<span class="string">&#x27;title&#x27;</span>):</span><br><span class="line">        product_info[<span class="string">&quot;description&quot;</span>] = desc_elem[<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line">    <span class="comment"># ⑤提取cover</span></span><br><span class="line">    cover_elem = soup.select_one(<span class="string">&#x27;img#largePic&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> cover_elem <span class="keyword">and</span> cover_elem.has_attr(<span class="string">&#x27;src&#x27;</span>):</span><br><span class="line">        src = cover_elem[<span class="string">&#x27;src&#x27;</span>]</span><br><span class="line">        product_info[<span class="string">&quot;cover&quot;</span>] = <span class="string">f&quot;https:<span class="subst">&#123;src&#125;</span>&quot;</span></span><br><span class="line">    <span class="comment"># ⑦提取作者、出版社、出版日期</span></span><br><span class="line">    messbox = soup.select_one(<span class="string">&#x27;div.messbox_info&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> messbox:</span><br><span class="line">        spans = messbox.select(<span class="string">&#x27;span&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(spans) &gt; <span class="number">0</span>:</span><br><span class="line">            author_elem = spans[<span class="number">0</span>].select_one(<span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">            <span class="keyword">if</span> author_elem:</span><br><span class="line">                product_info[<span class="string">&quot;specifications&quot;</span>][<span class="number">0</span>][<span class="string">&quot;value&quot;</span>] = author_elem.text.strip()</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(spans) &gt; <span class="number">1</span>:</span><br><span class="line">            publisher_elem = spans[<span class="number">1</span>].select_one(<span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">            <span class="keyword">if</span> publisher_elem:</span><br><span class="line">                product_info[<span class="string">&quot;specifications&quot;</span>][<span class="number">5</span>][<span class="string">&quot;value&quot;</span>] = publisher_elem.text.strip()</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(spans) &gt; <span class="number">2</span>:</span><br><span class="line">            product_info[<span class="string">&quot;specifications&quot;</span>][<span class="number">6</span>][<span class="string">&quot;value&quot;</span>] = spans[<span class="number">2</span>].text.split(<span class="string">&#x27;:&#x27;</span>, <span class="number">1</span>)[<span class="number">1</span>].strip()</span><br><span class="line">    <span class="comment"># ⑨提取ISBN和帧装</span></span><br><span class="line">    key_ul = soup.select_one(<span class="string">&#x27;ul.key.clearfix&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> key_ul:</span><br><span class="line">        lis = key_ul.select(<span class="string">&#x27;li&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(lis) &gt; <span class="number">2</span>:  <span class="comment"># 第三个li为帧装</span></span><br><span class="line">            framing_text = lis[<span class="number">2</span>].text.strip()</span><br><span class="line">            product_info[<span class="string">&quot;specifications&quot;</span>][<span class="number">3</span>][<span class="string">&quot;value&quot;</span>] = framing_text.split(<span class="string">&#x27;：&#x27;</span>, <span class="number">1</span>)[<span class="number">1</span>].strip()    </span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(lis) &gt; <span class="number">4</span>:  <span class="comment"># 第五个li为ISBN</span></span><br><span class="line">            isbn_text = lis[<span class="number">4</span>].text.strip()</span><br><span class="line">            product_info[<span class="string">&quot;specifications&quot;</span>][<span class="number">2</span>][<span class="string">&quot;value&quot;</span>] = isbn_text.split(<span class="string">&#x27;：&#x27;</span>, <span class="number">1</span>)[<span class="number">1</span>].strip()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> product_info</span><br></pre></td></tr></table></figure>
+
+<p>一点儿吐槽：<del>ai是真好用啊，感觉我不如ai一根。</del>当当网的网页结构是真的丑，甚至每本书各自的标签爬下来和主页的标签分类对不上，还要手动调整，也是被整无语了。</p>
+]]></content>
+      <tags>
+        <tag>爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>zsh的安装和简单配置</title>
+    <url>/post/88f7f195.html</url>
+    <content><![CDATA[<p>写在前面：本教程使用的是WSL2(Debian系统)，使用ArchLinux系或者RedHat系的操作系统可能在下面的操作中有些许不同之处。zsh有比bash更加丰富的扩展功能，在可自定义化和补全功能上都比bash要强大很多<del>(最重要的是zsh比bash的prompt好看多了)</del>。</p>
+<h2 id="一、下载zsh并设置其为默认shell"><a href="#一、下载zsh并设置其为默认shell" class="headerlink" title="一、下载zsh并设置其为默认shell"></a>一、下载zsh并设置其为默认shell</h2><ul>
+<li>下载zsh<br>下载zsh非常之简单，很多版本的Linux都提供了zsh的预编译包，可以通过系统的包管理器安装。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install zsh</span><br></pre></td></tr></table></figure>
+
+<p>如果你的Linux使用的是其他包管理工具，比如yum或是pacman，请自行查找教程。</p>
+<ul>
+<li><p>将zsh设置为默认shell<br>首先要检查zsh是否安装成功，输入命令<code>zsh --version</code>后如果有类似于下面的输出，那说明安装成功了。<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post3/dd48fdedf7063619e1708387b1d60e71.png" alt="zsh-version"><br>之后就是输入命令让zsh成为默认shell。</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">chsh -s /usr/bin/zsh</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>至此，zsh的下载安装已经完毕。</p>
+<h2 id="二、下载oh-my-zsh并进行插件和主题的配置"><a href="#二、下载oh-my-zsh并进行插件和主题的配置" class="headerlink" title="二、下载oh-my-zsh并进行插件和主题的配置"></a>二、下载oh-my-zsh并进行插件和主题的配置</h2><p>oh-my-zsh是一个开源的zsh配置管理框架，旨在帮助用户快速上手zsh，并通过丰富的插件和主题让命令行体验更加高效、美观和个性化。<del>(上述内容由ai生成)</del></p>
+<ul>
+<li><p>下载oh-my-zsh<br>如果你在国内，可以使用gitee的镜像</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://gitee.com/shmhlsy/oh-my-zsh-install.sh/raw/master/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>  如果你在国外或者就是想用github，使用以下命令：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">sh -c <span class="string">&quot;<span class="subst">$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)</span>&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载powerlevel10k<br>powerlevel10k是一个自定义化程度相当之高且方便使用的主题配置工具，和上面的一样，可以选择从github或者gitee来下载：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://github.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
+
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> --depth=1 https://gitee.com/romkatv/powerlevel10k.git <span class="variable">$&#123;ZSH_CUSTOM:-<span class="variable">$HOME</span>/.oh-my-zsh/custom&#125;</span>/themes/powerlevel10k</span><br></pre></td></tr></table></figure>
+
+<p>  下载完毕之后，编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">ZSH_THEME=&quot;主题名称&quot;</span><br><span class="line">#修改为：ZSH_THEME=&quot;powerlevel10k/powerlevel10k&quot;</span><br></pre></td></tr></table></figure>
+
+<p>  保存并退出后执行命令<code>source ~/.zshrc</code>后会让你自定义prompt外观。<br>  如果你之后又想进行外观的修改，可以输入命令：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">p10k configure</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>下载两个常用插件<br>先编辑<code>~/.zshrc</code>文件，找到以下行并修改：</p>
+  <figure class="highlight plaintext"><table><tr><td class="code"><pre><span class="line">plugins=(git) </span><br><span class="line">#修改为：plugins=(git zsh-autosuggestions zsh-syntax-highlighting)</span><br></pre></td></tr></table></figure>
+
+<p>  然后下载两个插件：</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-syntax-highlighting.git ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting</span><br></pre></td></tr></table></figure>
+
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/zsh-users/zsh-autosuggestions.git ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions</span><br></pre></td></tr></table></figure>
+
+<p>  最后仍然是执行命令<code>source ~/.zshrc</code>使插件生效。</p>
+</li>
+</ul>
+<p>以上就是zsh的安装和简单的配置，放一个我配置完的zsh的效果图：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post3/95f4d3600abefc9525dc9d907f96f21f.png" alt="zsh-example"></p>
+]]></content>
+      <tags>
+        <tag>Linux</tag>
+        <tag>教程</tag>
+        <tag>zsh</tag>
+        <tag>美化</tag>
       </tags>
   </entry>
   <entry>
@@ -304,32 +367,6 @@
         <tag>Docker</tag>
         <tag>前端</tag>
         <tag>后端</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>当当网数据爬取脚本</title>
-    <url>/post/7d2474f8.html</url>
-    <content><![CDATA[<p>写在前面：因为这学期上了软院传奇屎课软工2，为了更好地展示大作业(图书商城)的效果，故写了个爬虫爬取了当当网的数据。</p>
-<h2 id="一、获取Cookie"><a href="#一、获取Cookie" class="headerlink" title="一、获取Cookie"></a>一、获取Cookie</h2><p>因为不登陆的话当当网是有访问次数限制的，所以需要获取个人Cookie来维持登录状态。Cookie的获取非常简单，只需要在浏览器登录当当网后按下f12打开开发者工具，选择网络后再刷新一下页面，选择其中某一个元素就能查看到Cookie。</p>
-<p><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post7/e9f5d94557761a286babeecadcfdbbb4.png" alt="获取cookie"></p>
-<p>相关的登陆代码大致如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="variable language_">self</span>.session = requests.Session()</span><br><span class="line">    <span class="variable language_">self</span>.headers = &#123; <span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36&#x27;</span>&#125;</span><br><span class="line">    <span class="variable language_">self</span>.session.headers.update(<span class="variable language_">self</span>.headers)   </span><br><span class="line">    <span class="comment"># 直接从cookie.txt加载Cookie</span></span><br><span class="line">    <span class="variable language_">self</span>.load_cookies_from_file()</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_cookies_from_file</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;从cookie.txt文件加载Cookie数据&quot;&quot;&quot;</span></span><br><span class="line">    cookie_file = <span class="string">&quot;cookie.txt&quot;</span></span><br><span class="line">    <span class="keyword">if</span> os.path.exists(cookie_file):</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">with</span> <span class="built_in">open</span>(cookie_file, <span class="string">&#x27;r&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">                cookie_str = f.read().strip()</span><br><span class="line">                <span class="keyword">if</span> cookie_str:</span><br><span class="line">                    <span class="comment"># 解析Cookie字符串并添加到会话中</span></span><br><span class="line">                    cookies = &#123;&#125;</span><br><span class="line">                    <span class="keyword">for</span> item <span class="keyword">in</span> cookie_str.split(<span class="string">&#x27;;&#x27;</span>):</span><br><span class="line">                        <span class="keyword">if</span> item:</span><br><span class="line">                            item = item.strip()</span><br><span class="line">                            <span class="keyword">if</span> <span class="string">&#x27;=&#x27;</span> <span class="keyword">in</span> item:</span><br><span class="line">                                key, value = item.split(<span class="string">&#x27;=&#x27;</span>, <span class="number">1</span>)</span><br><span class="line">                                cookies[key] = value</span><br><span class="line">                        </span><br><span class="line">                    <span class="comment"># 将Cookie添加到会话</span></span><br><span class="line">                    <span class="variable language_">self</span>.session.cookies.update(cookies)</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">&quot;已从cookie.txt加载Cookie数据&quot;</span>)</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">&quot;cookie.txt文件为空&quot;</span>)</span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;加载Cookie数据失败: <span class="subst">&#123;e&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;未找到cookie.txt文件，将使用无登录状态访问&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;提示: 请从浏览器开发者工具中复制Cookie并保存到同目录的cookie.txt文件中&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<h2 id="二、分析网页元素"><a href="#二、分析网页元素" class="headerlink" title="二、分析网页元素"></a>二、分析网页元素</h2><p>这步更简单，只需要分析网页结构即可<del>(剩下的交给ai)</del>。下面以爬某个商品的图片链接来说明：打开商品详情页面，对准商品图片按下鼠标右键，在选项框里选择“检查”，</p>
-<p><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post7/2025-06-25%20181702.png" alt="检查"></p>
-<p>然后在弹出的开发者工具中就会显示图片对应的网页结构，</p>
-<p><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post7/dd74f6e7de8e2a17d0d90a7967218603.png" alt="图片网页结构"></p>
-<p>从html文件中可以看到商品图片对应的模块是id为<code>largePic</code>的<code>img</code>块，我们可以给ai描述为“从id为largePic的img块中获取src的内容，并在链接前面添加‘https:’。”</p>
-<p>获取链接的核心代码如下(使用了<code>BeautifulSoup</code>包)：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">cover_elem = soup.select_one(<span class="string">&#x27;img#largePic&#x27;</span>)</span><br><span class="line"><span class="keyword">if</span> cover_elem <span class="keyword">and</span> cover_elem.has_attr(<span class="string">&#x27;src&#x27;</span>):</span><br><span class="line">    src = cover_elem[<span class="string">&#x27;src&#x27;</span>]</span><br><span class="line">    product_info[<span class="string">&quot;cover&quot;</span>] = <span class="string">f&quot;https:<span class="subst">&#123;src&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>其余的相关信息也是依法炮制，比如要获取标题信息就对标题进行检查，要获取作者信息就对准作者信息进行检查，这里给出我获取的一些商品信息的代码：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">extract_product_info</span>(<span class="params">self, url: <span class="built_in">str</span></span>) -&gt; <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="type">Any</span>]:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;从商品页面提取详细信息&quot;&quot;&quot;</span></span><br><span class="line">    soup = <span class="variable language_">self</span>.fetch_page(url)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> soup:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">None</span></span><br><span class="line">    <span class="comment"># 初始化商品信息字典</span></span><br><span class="line">    product_info = &#123;</span><br><span class="line">        <span class="string">&quot;title&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">        <span class="string">&quot;price&quot;</span>: <span class="number">0</span>,</span><br><span class="line">        <span class="string">&quot;rate&quot;</span>: <span class="number">6</span>,  <span class="comment"># 根据要求默认为6</span></span><br><span class="line">        <span class="string">&quot;description&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">        <span class="string">&quot;cover&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">        <span class="string">&quot;detail&quot;</span>: <span class="string">&quot;&quot;</span>,</span><br><span class="line">        <span class="string">&quot;specifications&quot;</span>: [</span><br><span class="line">            &#123;<span class="string">&quot;item&quot;</span>: <span class="string">&quot;作者&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;item&quot;</span>: <span class="string">&quot;副标题&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;&quot;</span>&#125;,  <span class="comment"># 根据要求设置为空字符串</span></span><br><span class="line">            &#123;<span class="string">&quot;item&quot;</span>: <span class="string">&quot;ISBN&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;item&quot;</span>: <span class="string">&quot;帧装&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;item&quot;</span>: <span class="string">&quot;页数&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;&quot;</span>&#125;,  <span class="comment"># 根据要求设置为空字符串</span></span><br><span class="line">            &#123;<span class="string">&quot;item&quot;</span>: <span class="string">&quot;出版社&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;&quot;</span>&#125;,</span><br><span class="line">            &#123;<span class="string">&quot;item&quot;</span>: <span class="string">&quot;出版日期&quot;</span>, <span class="string">&quot;value&quot;</span>: <span class="string">&quot;&quot;</span>&#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment"># ①提取title</span></span><br><span class="line">    title_elem = soup.select_one(<span class="string">&#x27;div.name_info h1&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> title_elem <span class="keyword">and</span> title_elem.has_attr(<span class="string">&#x27;title&#x27;</span>):</span><br><span class="line">        full_title = title_elem[<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line">        <span class="comment"># 确保full_title是字符串</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(full_title, <span class="built_in">list</span>):</span><br><span class="line">            full_title = <span class="string">&#x27;&#x27;</span>.join(full_title)</span><br><span class="line">            <span class="comment"># 处理title，截取到第一个&#x27;（&#x27;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="string">&#x27;（&#x27;</span> <span class="keyword">in</span> full_title:</span><br><span class="line">            product_info[<span class="string">&quot;title&quot;</span>] = full_title.split(<span class="string">&#x27;（&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">elif</span> <span class="string">&#x27;(&#x27;</span> <span class="keyword">in</span> full_title:</span><br><span class="line">            product_info[<span class="string">&quot;title&quot;</span>] = full_title.split(<span class="string">&#x27;(&#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">elif</span> <span class="string">&#x27; &#x27;</span> <span class="keyword">in</span> full_title:</span><br><span class="line">            product_info[<span class="string">&quot;title&quot;</span>] = full_title.split(<span class="string">&#x27; &#x27;</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            product_info[<span class="string">&quot;title&quot;</span>] = full_title</span><br><span class="line">    <span class="comment"># ②提取price</span></span><br><span class="line">    price_elem = soup.select_one(<span class="string">&#x27;p#dd-price&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> price_elem:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="comment"># 提取数字部分</span></span><br><span class="line">            price_text = <span class="string">&#x27;&#x27;</span>.join(c <span class="keyword">for</span> c <span class="keyword">in</span> price_elem.text <span class="keyword">if</span> c.isdigit() <span class="keyword">or</span> c == <span class="string">&#x27;.&#x27;</span>)</span><br><span class="line">            product_info[<span class="string">&quot;price&quot;</span>] = <span class="built_in">float</span>(price_text)</span><br><span class="line">        <span class="keyword">except</span> ValueError:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">    <span class="comment"># ④提取description</span></span><br><span class="line">    desc_elem = soup.select_one(<span class="string">&#x27;span.head_title_name&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> desc_elem <span class="keyword">and</span> desc_elem.has_attr(<span class="string">&#x27;title&#x27;</span>):</span><br><span class="line">        product_info[<span class="string">&quot;description&quot;</span>] = desc_elem[<span class="string">&#x27;title&#x27;</span>]</span><br><span class="line">    <span class="comment"># ⑤提取cover</span></span><br><span class="line">    cover_elem = soup.select_one(<span class="string">&#x27;img#largePic&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> cover_elem <span class="keyword">and</span> cover_elem.has_attr(<span class="string">&#x27;src&#x27;</span>):</span><br><span class="line">        src = cover_elem[<span class="string">&#x27;src&#x27;</span>]</span><br><span class="line">        product_info[<span class="string">&quot;cover&quot;</span>] = <span class="string">f&quot;https:<span class="subst">&#123;src&#125;</span>&quot;</span></span><br><span class="line">    <span class="comment"># ⑦提取作者、出版社、出版日期</span></span><br><span class="line">    messbox = soup.select_one(<span class="string">&#x27;div.messbox_info&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> messbox:</span><br><span class="line">        spans = messbox.select(<span class="string">&#x27;span&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(spans) &gt; <span class="number">0</span>:</span><br><span class="line">            author_elem = spans[<span class="number">0</span>].select_one(<span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">            <span class="keyword">if</span> author_elem:</span><br><span class="line">                product_info[<span class="string">&quot;specifications&quot;</span>][<span class="number">0</span>][<span class="string">&quot;value&quot;</span>] = author_elem.text.strip()</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(spans) &gt; <span class="number">1</span>:</span><br><span class="line">            publisher_elem = spans[<span class="number">1</span>].select_one(<span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">            <span class="keyword">if</span> publisher_elem:</span><br><span class="line">                product_info[<span class="string">&quot;specifications&quot;</span>][<span class="number">5</span>][<span class="string">&quot;value&quot;</span>] = publisher_elem.text.strip()</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(spans) &gt; <span class="number">2</span>:</span><br><span class="line">            product_info[<span class="string">&quot;specifications&quot;</span>][<span class="number">6</span>][<span class="string">&quot;value&quot;</span>] = spans[<span class="number">2</span>].text.split(<span class="string">&#x27;:&#x27;</span>, <span class="number">1</span>)[<span class="number">1</span>].strip()</span><br><span class="line">    <span class="comment"># ⑨提取ISBN和帧装</span></span><br><span class="line">    key_ul = soup.select_one(<span class="string">&#x27;ul.key.clearfix&#x27;</span>)</span><br><span class="line">    <span class="keyword">if</span> key_ul:</span><br><span class="line">        lis = key_ul.select(<span class="string">&#x27;li&#x27;</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(lis) &gt; <span class="number">2</span>:  <span class="comment"># 第三个li为帧装</span></span><br><span class="line">            framing_text = lis[<span class="number">2</span>].text.strip()</span><br><span class="line">            product_info[<span class="string">&quot;specifications&quot;</span>][<span class="number">3</span>][<span class="string">&quot;value&quot;</span>] = framing_text.split(<span class="string">&#x27;：&#x27;</span>, <span class="number">1</span>)[<span class="number">1</span>].strip()    </span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(lis) &gt; <span class="number">4</span>:  <span class="comment"># 第五个li为ISBN</span></span><br><span class="line">            isbn_text = lis[<span class="number">4</span>].text.strip()</span><br><span class="line">            product_info[<span class="string">&quot;specifications&quot;</span>][<span class="number">2</span>][<span class="string">&quot;value&quot;</span>] = isbn_text.split(<span class="string">&#x27;：&#x27;</span>, <span class="number">1</span>)[<span class="number">1</span>].strip()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> product_info</span><br></pre></td></tr></table></figure>
-
-<p>一点儿吐槽：<del>ai是真好用啊，感觉我不如ai一根。</del>当当网的网页结构是真的丑，甚至每本书各自的标签爬下来和主页的标签分类对不上，还要手动调整，也是被整无语了。</p>
-]]></content>
-      <tags>
-        <tag>爬虫</tag>
       </tags>
   </entry>
   <entry>
