@@ -1,0 +1,514 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Google的三架马车: GFS, MapReduce, BigTable | Re_Char の 趣味小屋</title><meta name="author" content="Re_Char"><meta name="copyright" content="Re_Char"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、GFS(Google File System)1.1 GFS简述GFS是Google在2003年前后创建的可扩展分布式文件系统，用来满足Google不断扩展的数据处理需求。为大型网络和连接的节点提供容错、可靠性、可扩展性、可用性和性能。GFS由多个由低成本商品硬件组件构建的存储系统组成(使用了集群的概念，联合了多个硬件)，它经过优化以适应Google的不同数据使用和存储需求，例如其搜索引擎会生">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Google的三架马车: GFS, MapReduce, BigTable">
+<meta property="og:url" content="https://re-char.github.io/post/2b77d569.html">
+<meta property="og:site_name" content="Re_Char の 趣味小屋">
+<meta property="og:description" content="一、GFS(Google File System)1.1 GFS简述GFS是Google在2003年前后创建的可扩展分布式文件系统，用来满足Google不断扩展的数据处理需求。为大型网络和连接的节点提供容错、可靠性、可扩展性、可用性和性能。GFS由多个由低成本商品硬件组件构建的存储系统组成(使用了集群的概念，联合了多个硬件)，它经过优化以适应Google的不同数据使用和存储需求，例如其搜索引擎会生">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/cover/52909357_p0.jpg">
+<meta property="article:published_time" content="2025-09-20T05:23:48.000Z">
+<meta property="article:modified_time" content="2025-09-21T12:47:04.774Z">
+<meta property="article:author" content="Re_Char">
+<meta property="article:tag" content="文件系统">
+<meta property="article:tag" content="大数据">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/cover/52909357_p0.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Google的三架马车: GFS, MapReduce, BigTable",
+  "url": "https://re-char.github.io/post/2b77d569.html",
+  "image": "https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/cover/52909357_p0.jpg",
+  "datePublished": "2025-09-20T05:23:48.000Z",
+  "dateModified": "2025-09-21T12:47:04.774Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Re_Char",
+      "url": "https://re-char.github.io/"
+    }
+  ]
+}</script><link rel="shortcut icon" href="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/19956103_p0.ico"><link rel="canonical" href="https://re-char.github.io/post/2b77d569.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Google的三架马车: GFS, MapReduce, BigTable',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="stylesheet" href="/css/custom.css"  media="defer" onload="this.media='all'"><link rel="stylesheet" href="/css/font.css"><meta name="generator" content="Hexo 7.3.0"></head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">加载中...</div></div></div><script>(()=>{
+  const $loadingBox = document.getElementById('loading-box')
+  const $body = document.body
+  const preloader = {
+    endLoading: () => {
+      $body.style.overflow = ''
+      $loadingBox.classList.add('loaded')
+    },
+    initLoading: () => {
+      $body.style.overflow = 'hidden'
+      $loadingBox.classList.remove('loaded')
+    }
+  }
+
+  preloader.initLoading()
+  window.addEventListener('load', preloader.endLoading)
+
+  if (true) {
+    btf.addGlobalFn('pjaxSend', preloader.initLoading, 'preloader_init')
+    btf.addGlobalFn('pjaxComplete', preloader.endLoading, 'preloader_end')
+  }
+})()</script><div id="web_bg" style="background-image: url(https://img-baofun.zhhainiao.com/fs/5fdf61967f9618e26c5d2a00f4ab4260.jpg);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/avatar.png" onerror="this.onerror=null;this.src='/null'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">38</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://music.163.com/#/playlist?id=13137936909"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://www.pixiv.net/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://zh.annas-archive.org/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li></ul></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background: transparent;"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/76167176_p0.ico" alt="Logo"><span class="site-name">Re_Char の 趣味小屋</span></a><a class="nav-page-title" href="/"><span class="site-name">Google的三架马车: GFS, MapReduce, BigTable</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" target="_blank" rel="noopener" href="https://music.163.com/#/playlist?id=13137936909"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://www.pixiv.net/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" target="_blank" rel="noopener" href="https://zh.annas-archive.org/"><i class="fa-fw fas fa-book"></i><span> 书籍</span></a></li></ul></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Google的三架马车: GFS, MapReduce, BigTable</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-09-20T05:23:48.000Z" title="发表于 2025-09-20 13:23:48">2025-09-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-09-21T12:47:04.774Z" title="更新于 2025-09-21 20:47:04">2025-09-21</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">5.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>17分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="一、GFS-Google-File-System"><a href="#一、GFS-Google-File-System" class="headerlink" title="一、GFS(Google File System)"></a>一、GFS(Google File System)</h2><h3 id="1-1-GFS简述"><a href="#1-1-GFS简述" class="headerlink" title="1.1 GFS简述"></a>1.1 GFS简述</h3><p>GFS是Google在2003年前后创建的<strong>可扩展分布式文件系统</strong>，用来满足Google不断扩展的数据处理需求。为大型网络和连接的节点提供容错、可靠性、可扩展性、可用性和性能。GFS由多个由低成本商品硬件组件构建的存储系统组成(使用了<strong>集群</strong>的概念，联合了多个硬件)，它经过优化以适应Google的不同数据使用和存储需求，例如其搜索引擎会生成大量必须存储的数据。</p>
+<h3 id="1-2-GFS的特点"><a href="#1-2-GFS的特点" class="headerlink" title="1.2 GFS的特点"></a>1.2 GFS的特点</h3><ul>
+<li>由许多经常出现问题的廉价硬件构建而成。但是能不断地监控自己，并在常规的基础上及时<strong>发现、容忍和恢复组件故障</strong>。</li>
+<li>存储着非常多的大文件，对大文件进行了管理优化。</li>
+<li>对<strong>大文件顺序流式读写操作</strong>进行了优化以及对<strong>小文件随机读取</strong>进行了批处理和排序等优化。</li>
+<li>任何一个客户端都可以访问到存储在不同硬件上的某个文件，支持对文件的<strong>并行处理</strong>(同时读，同时写，边读边写)，因此原子性操作以及允许把一个大文件切片存在不同的硬件上也是必不可少的。</li>
+<li><strong>高持续带宽</strong>比低延迟更重要。因为目标应用大多偏重于处理大批量、高速率的数据，而很少有针对单个读或写的严格响应时间要求。</li>
+</ul>
+<h3 id="1-3-GFS的架构"><a href="#1-3-GFS的架构" class="headerlink" title="1.3 GFS的架构"></a>1.3 GFS的架构</h3><p>主要是以下几个特点：</p>
+<ul>
+<li>由单个主服务器和多个块服务器组成，由多个客户端访问。</li>
+<li>文件被划分为固定大小的块，一般为64MB。</li>
+<li>为了保证可靠性，每个组块在多个组块服务器上进行复制，默认情况下会复制三份。</li>
+<li>主服务器维护所有文件系统元数据。这包括命名空间、访问控制信息、文件到组块的映射以及组块的当前位置。</li>
+<li>客户端与主服务器交互进行元数据操作，但所有的数据承载通信都直接交给组块服务器。</li>
+</ul>
+<p><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post20/613da191f0181d5b2791148620ae7f85.png" alt="GFS架构"><br>可以看到客户端向主服务器发送文件访问请求，而主服务器只返回了文件句柄和所在的服务器位置，然后客户端拿着这个数据去向返回过来的数据块服务器地址要数据。</p>
+<h4 id="1-3-1-单主模式"><a href="#1-3-1-单主模式" class="headerlink" title="1.3.1 单主模式"></a>1.3.1 单主模式</h4><ul>
+<li><p>优点：极大地简化了GFS设计，因为单一主机可以使用全局知识做出复杂的块放置和复制决策。</p>
+</li>
+<li><p>缺点：</p>
+<ul>
+<li>单点故障。需要定期的将关键元数据检查点放到非易失性存储中。</li>
+<li>可能是系统的<strong>性能瓶颈点</strong>。必须尽量减少主服务器参与读写的操作。</li>
+</ul>
+<p>对于第二点，在架构图中我们可以发现，客户端从来不通过主服务器进行读取和写入文件数据。客户端会先询问主服务器他应该联系哪个块服务器，在限定的时间内缓存此信息(指应该联系的块服务器的信息)，并直接与块服务器交互以进行读写操作。</p>
+</li>
+</ul>
+<h4 id="1-3-2-块大小"><a href="#1-3-2-块大小" class="headerlink" title="1.3.2 块大小"></a>1.3.2 块大小</h4><p>块大小选择了64MB，它比典型的文件系统块大得多。每个数据块副本以普通Linux文件的形式存储在一个数据块服务器上，并根据需要进行扩展。</p>
+<ul>
+<li><p>优点：</p>
+<ul>
+<li>减少了客户端与主端<strong>交互</strong>的需求，因为对同一块进行读写操作只需要向主端发出一个初始请求即可获得块位置信息。</li>
+<li>在一个大的数据块上，客户端更有可能在给定的数据块上执行许多操作，因此可以通过在较长时间内保持与数据块服务器的持久TCP连接来<strong>减少网络开销</strong>。</li>
+<li>减少了存储在主节点上的元数据的大小。这使得我们可以将元数据保存在<strong>内存</strong>中。</li>
+</ul>
+</li>
+<li><p>缺点：一个大块量度，即使有懒惰的空间分配，也有它的缺点。</p>
+<ul>
+<li>小文件的<strong>碎片化存储</strong>浪费空间。</li>
+<li>如果有多个客户端访问同一个文件，那么存储这些数据块的数据块服务器可能会有多个并发请求导致<strong>请求过载</strong>。</li>
+</ul>
+<p>对于第二点，可以通过将这些可执行文件以更多的复制因子存储，并使批处理系统错开应用程序的启动时间来解决这个问题。还有一个潜在的长期解决方案是允许客户在这种情况下从其他客户那里读取数据。</p>
+</li>
+</ul>
+<h4 id="1-3-3-元数据"><a href="#1-3-3-元数据" class="headerlink" title="1.3.3 元数据"></a>1.3.3 元数据</h4><p>元数据存储在主内存中(块大小的优点提到了)，而数据存储在块服务器中。这使得主服务器操作非常快，并且还允许主服务器在后台通过其整个状态有效地执行定期扫描。周期性扫描用于实现块垃圾收集、块迁移等。</p>
+<p>主服务器存储以下三种元数据：</p>
+<ul>
+<li><strong>文件和Chunk的命名空间</strong>。</li>
+<li><strong>文件和Chunk的对应关系</strong>。</li>
+<li><strong>每个Chunk副本的存放地点</strong>。</li>
+</ul>
+<p>请注意，前两种类型的元数据通过将更改记录存储到主服务器本地磁盘上的操作日志中来保持持久性，并定期复制到远程机器。但是，主服务器不会持久存储块位置信息。相反，它会在主服务器启动时以及当有块服务器加入集群时询问每个块服务器关于它的块数据。这是因为块服务器是块位置和主要状态信息的权威数据源。</p>
+<h4 id="1-3-4-一致性模型"><a href="#1-3-4-一致性模型" class="headerlink" title="1.3.4 一致性模型"></a>1.3.4 一致性模型</h4><p>GFS有一个宽松的一致性模型，也可以称之为弱一致性模型，它很好地支持高度分布式应用，但仍然保持相对简单和高效的实现。</p>
+<p>论文中作者描述了文件区域的两种状态：</p>
+<ul>
+<li>如果所有客户端，无论从哪个副本读取，读到的数据都一样，那么我们认为文件region是“一致的”；</li>
+<li>如果对文件的数据修改之后，region是一致的，并且客户端能够看到写入操作全部的内容，那么这个region是“已定义的”。</li>
+</ul>
+<p><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post20/3bebfdae7b0aef059c91d5e6a127fa99.png" alt="两种状态"></p>
+<p>其他操作：</p>
+<ul>
+<li><strong>原子操作</strong>：<br>GFS提供了一些原子操作。文件命名，空间修改例如文件创建都是原子性的，并且由主服务器专门处理。命名空间锁(Namespace locking)保证了原子性，主服务器的操作日志定义了这些操作的全局顺序。</li>
+<li><strong>记录追加</strong>：<br>与常规的写入操作或者最佳操作相比，GFS提供了记录追加操作，即使存在并发冲突的情况下，也能够保证要追加的数据至少以原子操作的方式执行一次，但以GFS选择的偏移量(offset)。GFS将会返回这个追加数据的偏移量给客户端(并不能避免冲突，但是让冲突变得可容忍)。</li>
+</ul>
+<h3 id="1-4-总结"><a href="#1-4-总结" class="headerlink" title="1.4 总结"></a>1.4 总结</h3><p>上面的内容就是GFS的核心内容了，但是并没有很深入的探讨同时也还有很多内容没有讲到，比如主服务器的垃圾回收机制等等，但是理解其核心思想就已经可以了。</p>
+<h2 id="二、MapReduce"><a href="#二、MapReduce" class="headerlink" title="二、MapReduce"></a>二、MapReduce</h2><h3 id="2-1-MapReduce简述"><a href="#2-1-MapReduce简述" class="headerlink" title="2.1 MapReduce简述"></a>2.1 MapReduce简述</h3><p>MapReduce是一个<strong>分布式、并行处理</strong>的计算框架。<br>MapReduce把任务分为Map阶段和Reduce阶段。开发人员使用存储在DFS中数据(可实现快速存储)，编写分布式计算平台的MapReduce任务。由于MapReduce工作原理以及DFS的特性，平台能以并行的方式访问数据，从而实现快速访问数据。</p>
+<h3 id="2-2-MapReduce编程模型"><a href="#2-2-MapReduce编程模型" class="headerlink" title="2.2 MapReduce编程模型"></a>2.2 MapReduce编程模型</h3><ul>
+<li>Map函数由用户编写，取一个输入对，并产生一组中间键&#x2F;值对。MapReduce库将所有与相同中间键key_i相关联的中间值组合在一起，并将其传递给Reduce函数。</li>
+<li>Reduce函数也由用户编写，接受一个中间键key_i和该键的一组值。它将这些值合并在一起，形成一个可能更小的值集合。通常每次Reduce调用只产生0或1个输出值。中间值通过迭代器提供给用户的reduce函数。这使得我们可以处理太大而无法在内存中拟合的值列表。</li>
+</ul>
+<p>这里给出基于java的实现单词计数的写法示例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">TokenizerMapper</span></span><br><span class="line">        <span class="keyword">extends</span> <span class="title class_">Mapper</span>&lt;LongWritable, Text, Text, IntWritable&gt; &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">IntWritable</span> <span class="variable">one</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IntWritable</span>(<span class="number">1</span>);</span><br><span class="line">    <span class="keyword">private</span> <span class="type">Text</span> <span class="variable">word</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Text</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">map</span><span class="params">(LongWritable key, Text value, Context context)</span> </span><br><span class="line">            <span class="keyword">throws</span> IOException, InterruptedException &#123;</span><br><span class="line">        <span class="comment">// 将输入行转换为小写，并移除标点符号，只保留字母和空格</span></span><br><span class="line">        <span class="type">String</span> <span class="variable">line</span> <span class="operator">=</span> value.toString().toLowerCase().replaceAll(<span class="string">&quot;[^a-zA-Z\\s]&quot;</span>, <span class="string">&quot;&quot;</span>);</span><br><span class="line">        <span class="comment">// 使用 StringTokenizer 按空格分割单词</span></span><br><span class="line">        <span class="type">StringTokenizer</span> <span class="variable">tokenizer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringTokenizer</span>(line);</span><br><span class="line">        <span class="keyword">while</span> (tokenizer.hasMoreTokens()) &#123;</span><br><span class="line">            <span class="type">String</span> <span class="variable">token</span> <span class="operator">=</span> tokenizer.nextToken().trim();</span><br><span class="line">            <span class="comment">// 只处理非空单词</span></span><br><span class="line">            <span class="keyword">if</span> (!token.isEmpty()) &#123;</span><br><span class="line">                word.set(token);</span><br><span class="line">                context.write(word, one);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">class</span> <span class="title class_">IntSumReducer</span></span><br><span class="line">        <span class="keyword">extends</span> <span class="title class_">Reducer</span>&lt;Text, IntWritable, Text, IntWritable&gt; &#123;</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">private</span> <span class="type">IntWritable</span> <span class="variable">result</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">IntWritable</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">reduce</span><span class="params">(Text key, Iterable&lt;IntWritable&gt; values, Context context)</span> </span><br><span class="line">            <span class="keyword">throws</span> IOException, InterruptedException &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">sum</span> <span class="operator">=</span> <span class="number">0</span>; </span><br><span class="line">        <span class="comment">// 累加同一个单词的所有计数</span></span><br><span class="line">        <span class="keyword">for</span> (IntWritable value : values) &#123;</span><br><span class="line">            sum += value.get();</span><br><span class="line">        &#125;</span><br><span class="line">        result.set(sum);</span><br><span class="line">        context.write(key, result);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Map和Reduce函数对应的输入和输出如下(list表示的是返回零到多条数据)：</p>
+<table>
+<thead>
+<tr>
+<th align="center">函数</th>
+<th align="center">输入</th>
+<th align="center">输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">map</td>
+<td align="center">(k1, v1)</td>
+<td align="center">list(k2, v2)</td>
+</tr>
+<tr>
+<td align="center">reduce</td>
+<td align="center">(k2, list(v2))</td>
+<td align="center">list(v2)</td>
+</tr>
+</tbody></table>
+<h3 id="2-3-执行过程"><a href="#2-3-执行过程" class="headerlink" title="2.3 执行过程"></a>2.3 执行过程</h3><p>MapReduce应用程序执行过程：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post20/df7b6696f7519d1504efd19903139ae6.png" alt="执行过程"></p>
+<p>分为以下七步：</p>
+<ul>
+<li>用户程序中z的MapReduce库首先将输入文件<strong>分割</strong>成M块，通常为16兆字节到64兆字节每块(由用户通过可选参数进行控制)。然后，它在集群机器上启动许多程序的副本。</li>
+<li>程序的副本之一是特殊的–主程序。其余为由主程序分配工作的工人程序。有M个map任务和R个reduce任务需要分配。主程序挑选闲置工人程序，并为每个人分配一个map任务或reduce任务。</li>
+<li>被分配map任务的工人程序读取相应输入分片的内容。它从输入数据中解析出键&#x2F;值对，并将每个键&#x2F;值对传递给用户自定义的Map函数。Map函数产生的中间键&#x2F;值对在<strong>内存</strong>中缓冲。</li>
+<li>当主站通知reduce工人程序位置时，它使用远程调用从map工人程序的本地磁盘读取缓冲数据。当reduce工人程序读取所有中间数据时，它根据中间键对其进行排序，从而将相同键的所有出现<strong>归为一组</strong>。<strong>排序</strong>是需要的，因为通常许多不同的键映射到相同的reduce任务。如果中间数据量太大，不适合在内存中使用，则使用<strong>外部排序</strong>。这一段也是<strong>shuffle过程</strong>。</li>
+<li>reduce工人程序对排序后的中间数据进行<strong>迭代</strong>，对于遇到的每个唯一中间键，将该键和对应的中间值集合传递给用户的Reduce函数。Reduce函数的输出被添加到这个reduce分区的最终输出文件中。</li>
+<li>当所有map任务和reduce任务都已完成时，主程序唤醒用户程序。此时，用户程序中的MapReduce调用返回给用户代码。</li>
+</ul>
+<p>成功完成后，MapReduce的输出执行可用在<em>R</em>输出文件(每个reduce任务一个,文件名由用户指定)中。通常，用户不需要将这些<em>R</em>输出文件组合成一个文件–他们经常将这些文件作为输入传递给另一个MapReduce调用，或者使用它们从另一个分布式应用中处理被分割成多个文件的输入。</p>
+<h3 id="2-4-总结"><a href="#2-4-总结" class="headerlink" title="2.4 总结"></a>2.4 总结</h3><p>同样只是简单地讲了核心思想以及流程，很多东西也并没有涉及到，包括shuffle的优化，数据传输以及任务粒度等。想尝试一下MapReduce的话，可以使用<code>Hadoop</code>平台完成简单的WordCount任务，Map和Reduce函数也已经给出。</p>
+<h2 id="三、BigTable"><a href="#三、BigTable" class="headerlink" title="三、BigTable"></a>三、BigTable</h2><h3 id="3-1-BigTable简述"><a href="#3-1-BigTable简述" class="headerlink" title="3.1 BigTable简述"></a>3.1 BigTable简述</h3><p>BigTable是一个用于管理结构化数据的分布式存储系统，其设计目标是扩展到非常大的规模：跨越数千个商品服务器的数百亿字节的数据。它实现了几个目标：<strong>广泛适用性</strong>、<strong>可扩展性</strong>、<strong>高性能</strong>和<strong>高可用性</strong>。</p>
+<p>设计动机：</p>
+<ul>
+<li>需要存储的数据种类繁多：包括URL、网页内容、用户的个性化设置在内的数据都是Google需要经常处理的。</li>
+<li>需要存储的数据种类繁多海量的服务请求：Google运行着目前世界上最繁忙的系统，它每时每刻处理的客户服务请求数量是普通的系统根本无法承受的。</li>
+<li>商用数据库无法满足需求：一方面现有商用数据库的设计着眼点在于其通用性，另一方面对于底层系统的完全掌控会给后期的系统维护、升级带来极大的便利。</li>
+</ul>
+<h3 id="3-2-数据模型"><a href="#3-2-数据模型" class="headerlink" title="3.2 数据模型"></a>3.2 数据模型</h3><p>BigTable是一个稀疏的、分布式的、持久的多维排序映射。map由row_key、column_key和timestamp索引；映射中的每个值都是一个字节的无解释的数组(只负责存储，不负责读懂)。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(row:string, column:string, time:int64) → string</span><br></pre></td></tr></table></figure>
+
+<p>下图是一个存储网页的<em>Webtable</em>：<br><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/post20/ad4fce5e8f7864e39f2c8da025980a3b.png" alt="结构示例图"></p>
+<ul>
+<li>row是url的倒转，比如<a target="_blank" rel="noopener" href="http://www.google.com会存为com.google.www,这样的目的是前面的www大家都一样,而且子域名就会主域名靠一起,方便聚簇./">www.google.com会存为com.google.www，这样的目的是前面的www大家都一样，而且子域名就会主域名靠一起，方便聚簇。</a></li>
+<li>有多列，其中<code>contents:</code>列存储网页html内容。<code>anchor:</code>列存储指向这个页面的anchor文字，比如cnnsi.com和my.look.ca有指向<a target="_blank" rel="noopener" href="http://www.cnn.com的anchor,就如下图所示存储./">www.cnn.com的anchor，就如下图所示存储。</a></li>
+<li>每一个anchor cell只有一个版本，但是content cell有三个版本为t3，t5，t6。</li>
+</ul>
+<h4 id="3-2-1-Row"><a href="#3-2-1-Row" class="headerlink" title="3.2.1 Row"></a>3.2.1 Row</h4><ul>
+<li>行key是表的主键，可以是任意字符串，最大为64kb，在单行的读写都是<strong>原子</strong>的，使客户端在同一行存在并发更新的情况下更容易推断系统的行为。由于读写总是通过行键，这样的数据库也叫做KV数据库。</li>
+<li>BigTable按行key对数据进行排序，行范围<strong>动态分区</strong>，每个行的范围被称为<em>tablet</em>，是分布式和负载均衡的单位。因此，短范围的行读取是高效率的，通常只需要与少量的机器进行通信。客户可以通过选择他们的行键来利用这一特性，从而使他们的数据访问获得良好的局部性。</li>
+</ul>
+<h4 id="3-2-2-Column-Families"><a href="#3-2-2-Column-Families" class="headerlink" title="3.2.2 Column Families"></a>3.2.2 Column Families</h4><ul>
+<li>列族是访问控制的基本单位，同一列族内的所有数据通常类型相同(我们会把同一列族的数据一起压缩)。必须先创建列族，然后才能在该族下使用任何列键；<strong>列族一旦创建，其内部任何列键都可随时使用，也就是说一行的某个列族下可能会出现空值，这也就是说为什么BigTable是稀疏的</strong>。设计时要求一个表中的列族数量很少(最多几百个)，且运行期间极少变更。相比之下，表的列数可以无限。</li>
+<li>列键的命名语法为：<code>family:qualifier</code>。列族名称必须是可打印字符，限定符则可以是任意字符串。以Webtable为例，可以用language当做family，另一种是可以用anchor来当做family(如上图所示)，每个列key是一个anchor，qualifier是指向该url的网址，内容是链接文本。 </li>
+<li>访问控制以及磁盘、内存的计量都在列族级别进行。在Webtable中，这些控制让我们能够管理多种应用：一些负责添加新基础数据，一些读取基础数据并生成派生列族，还有一些只能查看已有数据(甚至可能因隐私原因无法查看所有列族)。比如BigTable的开源实现HBase，每一个列族的数据存在同一个HFile文件下。</li>
+</ul>
+<h4 id="3-2-4-Timestamp"><a href="#3-2-4-Timestamp" class="headerlink" title="3.2.4 Timestamp"></a>3.2.4 Timestamp</h4><ul>
+<li>BigTable中的每个单元格可以包含同一数据的多个版本；这些版本都是以<strong>时间戳为索引</strong>的，时间戳为64位整数。不同版本以<strong>递减</strong>的形式存储，以便可以首先读取最新版本。</li>
+<li>为了减少手动管理多版本数据的麻烦，BigTable给每个列族提供了两种<strong>自动垃圾回收(GC)策略</strong>，让系统自己帮用户清理旧版本：<ul>
+<li>只保留最近n个版本(老版本一旦超过n个就自动删除)。</li>
+<li>只保留“足够新”的版本(n天前写入的任何版本都会被自动清理掉)。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-3-API"><a href="#3-3-API" class="headerlink" title="3.3 API"></a>3.3 API</h3><p>BigTable API提供了创建和删除表和列族的功能。它还提供了更改簇、表和列族元数据的功能，如访问控制权限。</p>
+<ul>
+<li><p>客户端应用程序可以在大表中写入或删除值，从单个行中查找值，或者在表中的数据子集上进行迭代。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Open the table</span></span><br><span class="line">Table *T = <span class="built_in">OpenOrDie</span>(<span class="string">&quot;/bigtable/web/webtable&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Write a new anchor and delete an old anchor</span></span><br><span class="line"><span class="function">RowMutation <span class="title">r1</span><span class="params">(T, <span class="string">&quot;com.cnn.www&quot;</span>)</span></span>;</span><br><span class="line">r<span class="number">1.</span><span class="built_in">Set</span>(<span class="string">&quot;anchor:www.c-span.org&quot;</span>, <span class="string">&quot;CNN&quot;</span>);</span><br><span class="line">r<span class="number">1.</span><span class="built_in">Delete</span>(<span class="string">&quot;anchor:www.abc.com&quot;</span>);</span><br><span class="line">Operation op;</span><br><span class="line"><span class="built_in">Apply</span>(&amp;op, &amp;r1);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>客户端可以在多个列族上进行迭代，并且有几种机制来限制扫描产生的行、列和时间戳。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Scanner <span class="title">scanner</span><span class="params">(T)</span></span>;</span><br><span class="line">ScanStream *stream; stream = scanner.<span class="built_in">FetchColumnFamily</span>(<span class="string">&quot;anchor&quot;</span>);</span><br><span class="line">stream-&gt;<span class="built_in">SetReturnAllVersions</span>(); scanner.<span class="built_in">Lookup</span>(<span class="string">&quot;com.cnn.www&quot;</span>);</span><br><span class="line"><span class="keyword">for</span> (; !stream-&gt;<span class="built_in">Done</span>(); stream-&gt;<span class="built_in">Next</span>()) &#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;%s %s %lld %s\n&quot;</span>,</span><br><span class="line">  scanner.<span class="built_in">RowName</span>(),</span><br><span class="line">  stream-&gt;<span class="built_in">ColumnName</span>(),</span><br><span class="line">  stream-&gt;<span class="built_in">MicroTimestamp</span>(),</span><br><span class="line">  stream-&gt;<span class="built_in">Value</span>());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="3-4-构建块"><a href="#3-4-构建块" class="headerlink" title="3.4 构建块"></a>3.4 构建块</h3><ul>
+<li><p>BigTable使用<strong>分布式的GFS</strong>来存储日志和数据文件，依赖于集群管理系统，用于调度作业、管理共享机器上的资源、处理机器故障和监控机器状态。</p>
+</li>
+<li><p>BigTable数据格式为<code>SSTable</code>，SSTable提供了一个<strong>不可变的、有序的从键到值的不可变映射</strong>。每个SSTable包含一个块(通常每个块的大小为64KB)，块索引(存储在SSTable的末尾)用于定位块。SSTable打开时索引被加载到内存中，查找时先内存二分查找索引找到块，再从磁盘一次读取指定的块(也可以把整个SSTable加载到内存，这样就不涉及到磁盘了)。</p>
+</li>
+<li><p>BigTable依赖于一种称为<strong>Chubby</strong>的高可用性和持久性的<strong>分布式锁服务</strong>。Chubby包含了5个副本，其中一个被选为master并提供request服务，采用5节点部署，多数派存活即可服务；用Paxos选主并同步<strong>小文件内容</strong>与<strong>锁状态</strong>。Bigtable主要通过Chubby完成以下5个任务：</p>
+<ul>
+<li><strong>Master选举</strong>：同一时刻最多1个活跃Master。</li>
+<li><strong>Bootstrap指针</strong>：记录root tablet在哪台Tablet Server(整个BigTable数据的寻址起点)。</li>
+<li><strong>Tablet Server生命周期</strong>：启动时在Chubby指定目录下创建临时文件标志着上线了；Master监视该目录，文件消失认为下线了。</li>
+<li><strong>Schema存储</strong>：每张表的列族定义、权限ACL作为小文件放在Chubby。</li>
+<li><strong>访问控制列表</strong>：客户端读ACL文件判断用户权限(文件需要从Chubby里获取)。</li>
+</ul>
+<p>如果Chubby不可用，那么Bigtable也将不可用。</p>
+</li>
+</ul>
+<h3 id="3-5-执行过程"><a href="#3-5-执行过程" class="headerlink" title="3.5 执行过程"></a>3.5 执行过程</h3><h4 id="3-5-1-三大组件架构："><a href="#3-5-1-三大组件架构：" class="headerlink" title="3.5.1 三大组件架构："></a>3.5.1 三大组件架构：</h4><table>
+<thead>
+<tr>
+<th align="center">组件</th>
+<th align="center">作用</th>
+<th align="left">特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">Client Library</td>
+<td align="center">被链接到每个应用进程里</td>
+<td align="left">- 自己缓存<strong>tablet → 所在服务器</strong>的映射<br>- 读写直接连 Tablet Server，不经过 Master</td>
+</tr>
+<tr>
+<td align="center">Master</td>
+<td align="center">集群管理者</td>
+<td align="left">- 只负责<strong>元数据管理</strong>(分配 tablet、负载均衡、故障检测等)<br>- 不承载数据流量 → 负载很轻</td>
+</tr>
+<tr>
+<td align="center">Tablet Server</td>
+<td align="center">工作者，被master调度</td>
+<td align="left">- 每台管理<strong>10–1000个tablet</strong><br>- 处理<strong>读写请求</strong>及<strong>tablet分裂</strong><br>- 可动态上下线，<strong>弹性伸缩</strong></td>
+</tr>
+</tbody></table>
+<h4 id="3-5-2-数据流路径-关键设计"><a href="#3-5-2-数据流路径-关键设计" class="headerlink" title="3.5.2 数据流路径(关键设计)"></a>3.5.2 数据流路径(关键设计)</h4><ul>
+<li>客户端<strong>首次</strong>从Chubby拿到<strong>root tablet</strong>位置(bootstrap)。</li>
+<li>随后自己<strong>递归</strong>(因为是多级索引)地从<strong>元数据表</strong>(METADATA 表)查出目标tablet所在服务器。</li>
+<li><strong>直接</strong>与对应的Tablet Server建立连接读写数据，因此大部分的读写请求不会经过Master，Master只做后台调度，不会成为性能瓶颈。</li>
+</ul>
+<p>显然这是基于DFS的设计。</p>
+<h4 id="3-5-3-数据分片模型"><a href="#3-5-3-数据分片模型" class="headerlink" title="3.5.3 数据分片模型"></a>3.5.3 数据分片模型</h4><ul>
+<li>table → 多个tablet，每个tablet对应<strong>一段连续的行键范围</strong>(row range)。</li>
+<li><strong>初始</strong>：表只有1个tablet，表可能有多个。</li>
+<li><strong>自动分裂</strong>：当tablet大小达到100–200MB(默认阈值)，Tablet Server会<strong>就地拆成两半</strong>，并<strong>异步通知</strong>Master重新登记，分裂过程对客户端透明，无需停机。</li>
+</ul>
+<p>Row提到过tablet的作用，选择100-200MB作为阈值是因为太小操作过于频繁，太大的话占用内存过大，并发效率降低，可以联想到DFS选择64MB为默认chunk，这样也不会多出很多碎片文件浪费存储空间。</p>
+<h4 id="3-5-4-弹性伸缩"><a href="#3-5-4-弹性伸缩" class="headerlink" title="3.5.4 弹性伸缩"></a>3.5.4 弹性伸缩</h4><ul>
+<li>Tablet Server可动态加减<ul>
+<li>上线：向Chubby注册<strong>临时文件</strong>，Master发现后把<strong>空闲tablet</strong>迁移过来(负载均衡)。</li>
+<li>下线&#x2F;宕机：临时文件消失，Master<strong>将其tablet重新分配</strong>给其他服务器-&gt;集群容量随业务负载平滑扩缩。</li>
+</ul>
+</li>
+</ul>
+<p>这也是前面提到过的Chubby的核心作用之一。</p>
+<h3 id="3-6-总结"><a href="#3-6-总结" class="headerlink" title="3.6 总结"></a>3.6 总结</h3><p>可以看出来BigTable非常依赖GFS这个底层框架，也可以看出来Google工程师的厉害之处。当然BigTable也还有很多东西没有整理，包括tablet位置与动态分区、SSTable底层结构等，但已经整理了其核心内容，<del>剩下的细节设计部分就交给以后的我吧。。。</del></p>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>Google的三架马车: GFS, MapReduce, BigTable</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="https://re-char.github.io/post/2b77d569.html">https://re-char.github.io/post/2b77d569.html</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a" style="display: inline-block;width: 120px"><h>作者</h><div class="post-copyright-cc-info"><h>Re_Char</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>发布于</h><div class="post-copyright-cc-info"><h>2025-09-20</h></div></div><div class="post-copyright-u" style="display: inline-block;width: 120px"><h>更新于</h><div class="post-copyright-cc-info"><h>2025-09-21</h></div></div><div class="post-copyright-c" style="display: inline-block;width: 120px"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY 4.0" href="https://creativecommons.org/licenses/by/4.0/deed.zh">CC BY 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F/">文件系统</a><a class="post-meta__tags" href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/">大数据</a></div><div class="post-share"><div class="social-share" data-image="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/cover/52909357_p0.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="waline-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/avatar.png" onerror="this.onerror=null;this.src='/null'" alt="avatar"/></div><div class="author-info-name">Re_Char</div><div class="author-info-description">逸一时，误一世！</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">21</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">38</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/Re-Char/Re-Char.github.io"><i class="fab fa-github"></i><span>项目主页</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/Re-Char" target="_blank" title=""><i class="iconfont icon-github-fill"></i></a><a class="social-icon" href="https://space.bilibili.com/429931853" target="_blank" title=""><i class="iconfont icon-bilibili-fill"></i></a><a class="social-icon" href="mailto:zy3372488357@gmail.com" target="_blank" title=""><i class="iconfont icon-youxiang-mail_fill"></i></a><a class="social-icon" href="tencent://AddContact/?fromId=50&amp;fromSubId=1&amp;subcmd=all&amp;uin=3372488357" target="_blank" title=""><i class="iconfont icon-QQ-circle-fill"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content"><p align="center">去听サイエンス谢谢喵ヾ(=`ω´=)ノ”</p> <p align="center"><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/a1a993463480b172e9be319888edc1df.png" width="230"></p></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81GFS-Google-File-System"><span class="toc-number">1.</span> <span class="toc-text">一、GFS(Google File System)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-GFS%E7%AE%80%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 GFS简述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-GFS%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 GFS的特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-GFS%E7%9A%84%E6%9E%B6%E6%9E%84"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 GFS的架构</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-1-%E5%8D%95%E4%B8%BB%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.3.1 单主模式</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-2-%E5%9D%97%E5%A4%A7%E5%B0%8F"><span class="toc-number">1.3.2.</span> <span class="toc-text">1.3.2 块大小</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-%E5%85%83%E6%95%B0%E6%8D%AE"><span class="toc-number">1.3.3.</span> <span class="toc-text">1.3.3 元数据</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-4-%E4%B8%80%E8%87%B4%E6%80%A7%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.3.4.</span> <span class="toc-text">1.3.4 一致性模型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81MapReduce"><span class="toc-number">2.</span> <span class="toc-text">二、MapReduce</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-MapReduce%E7%AE%80%E8%BF%B0"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 MapReduce简述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-MapReduce%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 MapReduce编程模型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 执行过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E6%80%BB%E7%BB%93"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 总结</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81BigTable"><span class="toc-number">3.</span> <span class="toc-text">三、BigTable</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-BigTable%E7%AE%80%E8%BF%B0"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 BigTable简述</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 数据模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-Row"><span class="toc-number">3.2.1.</span> <span class="toc-text">3.2.1 Row</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-Column-Families"><span class="toc-number">3.2.2.</span> <span class="toc-text">3.2.2 Column Families</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-4-Timestamp"><span class="toc-number">3.2.3.</span> <span class="toc-text">3.2.4 Timestamp</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-API"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E6%9E%84%E5%BB%BA%E5%9D%97"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 构建块</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 执行过程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-1-%E4%B8%89%E5%A4%A7%E7%BB%84%E4%BB%B6%E6%9E%B6%E6%9E%84%EF%BC%9A"><span class="toc-number">3.5.1.</span> <span class="toc-text">3.5.1 三大组件架构：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-2-%E6%95%B0%E6%8D%AE%E6%B5%81%E8%B7%AF%E5%BE%84-%E5%85%B3%E9%94%AE%E8%AE%BE%E8%AE%A1"><span class="toc-number">3.5.2.</span> <span class="toc-text">3.5.2 数据流路径(关键设计)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-3-%E6%95%B0%E6%8D%AE%E5%88%86%E7%89%87%E6%A8%A1%E5%9E%8B"><span class="toc-number">3.5.3.</span> <span class="toc-text">3.5.3 数据分片模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-4-%E5%BC%B9%E6%80%A7%E4%BC%B8%E7%BC%A9"><span class="toc-number">3.5.4.</span> <span class="toc-text">3.5.4 弹性伸缩</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E6%80%BB%E7%BB%93"><span class="toc-number">3.6.</span> <span class="toc-text">3.6 总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/cdede8d5.html" title="LeetCode刷题笔记(九): 位运算"><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/cover/%E7%9C%8B%E6%9D%BF%E5%A8%9866502871_p0.jpg" onerror="this.onerror=null;this.src='/null'" alt="LeetCode刷题笔记(九): 位运算"/></a><div class="content"><a class="title" href="/post/cdede8d5.html" title="LeetCode刷题笔记(九): 位运算">LeetCode刷题笔记(九): 位运算</a><time datetime="2025-09-21T04:35:02.000Z" title="发表于 2025-09-21 12:35:02">2025-09-21</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/2b77d569.html" title="Google的三架马车: GFS, MapReduce, BigTable"><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/cover/52909357_p0.jpg" onerror="this.onerror=null;this.src='/null'" alt="Google的三架马车: GFS, MapReduce, BigTable"/></a><div class="content"><a class="title" href="/post/2b77d569.html" title="Google的三架马车: GFS, MapReduce, BigTable">Google的三架马车: GFS, MapReduce, BigTable</a><time datetime="2025-09-20T05:23:48.000Z" title="发表于 2025-09-20 13:23:48">2025-09-20</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/2ffba5b8.html" title="LeetCode刷题笔记(八): 分治"><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/cover/62585541_p0.jpg" onerror="this.onerror=null;this.src='/null'" alt="LeetCode刷题笔记(八): 分治"/></a><div class="content"><a class="title" href="/post/2ffba5b8.html" title="LeetCode刷题笔记(八): 分治">LeetCode刷题笔记(八): 分治</a><time datetime="2025-09-18T07:20:43.000Z" title="发表于 2025-09-18 15:20:43">2025-09-18</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/ebd95021.html" title="LeetCode刷题笔记(七): 数学问题"><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/cover/68532396_p0.jpg" onerror="this.onerror=null;this.src='/null'" alt="LeetCode刷题笔记(七): 数学问题"/></a><div class="content"><a class="title" href="/post/ebd95021.html" title="LeetCode刷题笔记(七): 数学问题">LeetCode刷题笔记(七): 数学问题</a><time datetime="2025-09-15T09:49:33.000Z" title="发表于 2025-09-15 17:49:33">2025-09-15</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/d45f1ea9.html" title="Java代理模式: JDK代理与CGLIB代理"><img src="https://my-github-blog.oss-cn-hangzhou.aliyuncs.com/cover/61269686_p0.jpg" onerror="this.onerror=null;this.src='/null'" alt="Java代理模式: JDK代理与CGLIB代理"/></a><div class="content"><a class="title" href="/post/d45f1ea9.html" title="Java代理模式: JDK代理与CGLIB代理">Java代理模式: JDK代理与CGLIB代理</a><time datetime="2025-09-13T04:56:24.000Z" title="发表于 2025-09-13 12:56:24">2025-09-13</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div id="footer-wrap"><div class="copyright">&copy;2024 - 2025 By Re_Char</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">曾经沧海难为水，除却巫山不是云</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>(() => {
+  let initFn = window.walineFn || null
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = {"requiredMeta":["nick","mail"]}
+
+  const destroyWaline = ele => ele.destroy()
+
+  const initWaline = (Fn, el = document, path = window.location.pathname) => {
+    const waline = Fn({
+      el: el.querySelector('#waline-wrap'),
+      serverURL: 'https://waline-seven-pearl.vercel.app/',
+      pageview: false,
+      dark: 'html[data-theme="dark"]',
+      comment: false,
+      ...option,
+      path: isShuoshuo ? path : (option && option.path) || path
+    })
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyWaline = () => {
+        destroyWaline(waline)
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const loadWaline = (el, path) => {
+    if (initFn) initWaline(initFn, el, path)
+    else {
+      btf.getCSS('https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.css')
+        .then(() => import('https://cdn.jsdelivr.net/npm/@waline/client/dist/waline.min.js'))
+        .then(({ init }) => {
+          initFn = init || Waline.init
+          initWaline(initFn, el, path)
+          window.walineFn = initFn
+        })
+    }
+  }
+
+  if (isShuoshuo) {
+    'Waline' === 'Waline'
+      ? window.shuoshuoComment = { loadComment: loadWaline } 
+      : window.loadOtherComment = loadWaline
+    return
+  }
+
+  if ('Waline' === 'Waline' || !false) {
+    if (false) btf.loadComment(document.getElementById('waline-wrap'),loadWaline)
+    else setTimeout(loadWaline, 0)
+  } else {
+    window.loadOtherComment = loadWaline
+  }
+})()</script></div><div class="aplayer no-destroy" data-id="13137936909" data-server="netease" data-type="playlist" data-fixed="true" data-mini="true" data-listFolded="false" data-order="random" data-preload="none" data-autoplay="false" muted></div><canvas class="fireworks" mobile="false"></canvas><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/fireworks.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/activate-power-mode.min.js"></script><script>POWERMODE.colorful = true;
+POWERMODE.shake = true;
+POWERMODE.mobile = false;
+document.body.addEventListener('input', POWERMODE);
+</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script>(() => {
+  const destroyAplayer = () => {
+    if (window.aplayers) {
+      for (let i = 0; i < window.aplayers.length; i++) {
+        if (!window.aplayers[i].options.fixed) {
+          window.aplayers[i].destroy()
+        }
+      }
+    }
+  }
+
+  const runMetingJS = () => {
+    typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+  }
+
+  btf.addGlobalFn('pjaxSend', destroyAplayer, 'destroyAplayer')
+  btf.addGlobalFn('pjaxComplete', loadMeting, 'runMetingJS')
+})()</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>(() => {
+  const pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => fn())
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      pjax.loadUrl('/404.html')
+    }
+  })
+})()</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/poi.model.json"},"display":{"position":"right","width":200,"height":200},"mobile":{"show":false},"log":false});</script></body></html>
